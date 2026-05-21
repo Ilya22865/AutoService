@@ -1,5 +1,27 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, Navigate } from 'react-router-dom';
 import logoImg from '../../images/nurb.png';
+
+function getPayload(): Record<string, string> | null {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  try {
+    const raw = atob(token.split('.')[1]);
+    const utf8 = decodeURIComponent(escape(raw));
+    return JSON.parse(utf8);
+  } catch { return null; }
+}
+
+function getRole(): string | null {
+  const p = getPayload();
+  if (!p) return null;
+  return p['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || p.role || null;
+}
+
+function getUserName(): string {
+  const p = getPayload();
+  if (!p) return 'Сотрудник';
+  return p['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || p.unique_name || p.name || 'Сотрудник';
+}
 
 const navItems = [
   {
@@ -40,6 +62,12 @@ const navItems = [
 ];
 
 export default function EmployeeLayout() {
+  const role = getRole();
+  const name = getUserName();
+
+  if (!role) return <Navigate to="/login" replace />;
+  if (role !== 'Employee') return <Navigate to="/" replace />;
+
   return (
     <div className="emp-layout">
       <aside className="emp-sidebar">
@@ -64,18 +92,18 @@ export default function EmployeeLayout() {
         </nav>
         <div className="emp-sidebar__footer">
           <div className="emp-sidebar__user">
-            <div className="emp-sidebar__avatar">A</div>
+            <div className="emp-sidebar__avatar">{name.charAt(0)}</div>
             <div className="emp-sidebar__user-info">
-              <span className="emp-sidebar__user-name">Администратор</span>
+              <span className="emp-sidebar__user-name">{name}</span>
               <span className="emp-sidebar__user-role">Сотрудник</span>
             </div>
           </div>
-          <a href="/" className="emp-sidebar__logout">
+          <button onClick={() => { localStorage.removeItem('token'); window.location.href = '/'; }} className="emp-sidebar__logout">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
               <path d="M7 15H3a1 1 0 01-1-1V4a1 1 0 011-1h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               <path d="M12 12l3-3-3-3M15 9H7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-          </a>
+          </button>
         </div>
       </aside>
       <div className="emp-main">

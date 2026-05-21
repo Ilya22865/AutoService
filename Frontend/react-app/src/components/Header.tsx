@@ -19,7 +19,7 @@ function getUser(): { name: string; role: string } | null {
     const utf8 = decodeURIComponent(escape(raw));
     const p = JSON.parse(utf8);
         const name = p["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] || p.unique_name || p.name;
-        const role = p["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role"] || p.role;
+        const role = p["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || p.role;
         return name ? { name, role } : null;
     } catch { return null; }
 }

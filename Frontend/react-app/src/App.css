@@ -2328,3 +2328,26 @@
     grid-template-columns: 1fr;
   }
 }
+
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: 16px;
+}
+
+.not-found h1 {
+  font-size: 96px;
+  color: var(--accent);
+  line-height: 1;
+  margin: 0;
+}
+
+.not-found p {
+  font-size: 18px;
+  color: var(--text);
+  margin: 0;
+}
