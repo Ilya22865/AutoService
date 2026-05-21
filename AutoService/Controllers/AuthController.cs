@@ -32,7 +32,8 @@ namespace AutoService.Controllers
                 return Unauthorized("Неверный логин или пароль!");
             }
 
-            var token = _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email);
+            var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, user.Role);
+            return Ok(new { token, user.Id, user.Email, user.FullName, role = user.Role.ToString() });
         }
 
         [HttpPost("register")]
@@ -81,8 +82,8 @@ namespace AutoService.Controllers
                     _context.Employees.Add(employee);
                     await _context.SaveChangesAsync();
 
-                    var employeeToken = _tokenGeneratorService.GenerateTokenServiceAsync(employeeUs.Id, employeeUs.Email, employee.FullName, UserRole.Employee);
-                    return Ok(new { Token = employeeToken, employeeUs.Id, employee.FullName, employee.Salary, employee.Position, role = "Employee" });
+                    var employeeToken = await _tokenGeneratorService.GenerateTokenServiceAsync(employeeUs.Id, employeeUs.Email, employeeUs.FullName, UserRole.Employee);
+                    return Ok(new { token = employeeToken, id = employeeUs.Id, fullName = employeeUs.FullName, salary = employee.Salary, position = employee.Position, role = "Employee" });
                 }
                 else
                 {
@@ -111,8 +112,8 @@ namespace AutoService.Controllers
             _context.Clients.Add(client);
             await _context.SaveChangesAsync();
 
-            var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, client.FullName, UserRole.Client);
-            return Ok(new { token, user.Id, user.Email, client.FullName, client.Address, client.PhoneNumber, role = "Client" });
+            var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, UserRole.Client);
+            return Ok(new { token, user.Id, user.Email, user.FullName, client.Address, client.PhoneNumber, role = "Client" });
         }
 
         private static string HashPassword(string password)

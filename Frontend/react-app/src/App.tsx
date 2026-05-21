@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Reviews from './pages/Reviews';
 import OrderPage from './pages/OrderPage';
+import Account from './pages/Account';
 import EmployeeLayout from './pages/employee/EmployeeLayout';
 import Dashboard from './pages/employee/Dashboard';
 import Orders from './pages/employee/Orders';
@@ -23,6 +24,7 @@ function PublicLayout() {
         <Route path="/register" element={<Register />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/order" element={<OrderPage />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
       <Footer />
     </>

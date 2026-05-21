@@ -7,7 +7,7 @@ namespace AutoService.DTOs.Auth
         public string Email { get; set; } = null!;
         public string? Address { get; set; }
         public string Password { get; set; } = null!;
-        public string EmployeeCode { get; set; }
+        public string? EmployeeCode { get; set; }
         public string? Position { get; set; }
         public decimal Salary { get; set; }
     }
