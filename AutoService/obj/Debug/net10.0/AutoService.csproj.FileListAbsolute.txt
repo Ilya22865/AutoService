@@ -44,3 +44,4 @@
 /home/user/AutoService/AutoService/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 /home/user/AutoService/AutoService/bin/Debug/net10.0/Microsoft.IdentityModel.Tokens.dll
 /home/user/AutoService/AutoService/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll
+/home/user/AutoService/AutoService/obj/Debug/net10.0/AutoService.sourcelink.json

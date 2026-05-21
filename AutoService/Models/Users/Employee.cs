@@ -5,7 +5,6 @@ namespace AutoService.Models.Users
     public class Employee
     {
         public int Id { get; set; }
-        public string FullName { get; set; } = null!;
         public decimal Salary { get; set; }
         public string Position { get; set; } = null!;
         public int? UserId { get; set; }

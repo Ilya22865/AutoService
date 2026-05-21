@@ -23,6 +23,18 @@ namespace AutoService.Controllers
             _tokenGeneratorService = tokenGeneratorService;
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Email == dto.Email);
+            if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
+            {
+                return Unauthorized("Неверный логин или пароль!");
+            }
+
+            var token = _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email);
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
@@ -39,7 +51,7 @@ namespace AutoService.Controllers
             {
                 return BadRequest("Такой пользователь уже существует!");
             }
-
+        
             bool isEmailValid = await _emailValidatorService.IsValidAsync(dto.Email, hunterApiKey ?? "");
             if (!isEmailValid)
             {
@@ -51,6 +63,7 @@ namespace AutoService.Controllers
                 {
                     var employeeUs = new User
                     {
+                        FullName = dto.FullName,
                         Email = dto.Email,
                         PasswordHash = HashPassword(dto.Password),
                         Role = UserRole.Employee
@@ -60,7 +73,6 @@ namespace AutoService.Controllers
 
                     var employee = new Employee
                     {
-                        FullName = dto.FullName,
                         Salary = dto.Salary,
                         Position = dto.Position,
                         UserId = employeeUs.Id
@@ -80,6 +92,7 @@ namespace AutoService.Controllers
 
             var user = new User
             {
+                FullName = dto.FullName,
                 Email = dto.Email,
                 PasswordHash = HashPassword(dto.Password),
                 Role = UserRole.Client
@@ -90,7 +103,6 @@ namespace AutoService.Controllers
 
             var client = new Client
             {
-                FullName = dto.FullName,
                 Address = dto.Address,
                 PhoneNumber = dto.PhoneNumber,
                 UserId = user.Id
@@ -106,6 +118,11 @@ namespace AutoService.Controllers
         private static string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        private static bool VerifyPassword(string password, string hashedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
     }
 }
