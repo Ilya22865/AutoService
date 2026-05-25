@@ -10,6 +10,6 @@ namespace AutoService.Models.Order
         public int DetailId { get; set; }
         public Detail? Detail { get; set; }
         public int Quantity { get; set; }
-        public int PriceAtSale { get; set; }
+        public decimal PriceAtSale { get; set; }
     }
 }
