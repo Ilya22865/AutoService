@@ -14,6 +14,8 @@ namespace AutoService.Models.Order
         public int Id { get; set; }
         public OrderStatus? Status { get; set; }
         public int? ClientId { get; set; }
+        public string? Comment { get; set; }
+        public DateTime? CreatedAt { get; set; }
         public Client? Client { get; set; }
         public decimal TotalAmount { get; set; }
         public int? VehicleId { get; set; }

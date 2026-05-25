@@ -62,7 +62,9 @@ namespace AutoService.Controllers
                 ClientId = client.Id,
                 VehicleId = vehicle?.Id,
                 TotalAmount = (dto.Services?.Sum(s => s.TotalPrice) ?? 0) +
-                              (dto.Details?.Sum(d => d.TotalPrice) ?? 0)
+                              (dto.Details?.Sum(d => d.TotalPrice) ?? 0),
+                Comment = dto.Comment ?? null,
+                CreatedAt = DateTime.Now
             };
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();

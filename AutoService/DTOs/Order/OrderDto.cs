@@ -11,5 +11,6 @@ namespace AutoService.DTOs.Order
         public VehicleDto? Vehicle { get; set; }
         public List<OrderServicesDto> Services { get; set; } = new List<OrderServicesDto>();
         public List<OrderDetailsDto> Details { get; set; } = new List<OrderDetailsDto>();
+        public string? Comment { get; set; }
     }
 }

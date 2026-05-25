@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { orderApi } from '../api';
 
 const serviceList = [
   { id: 1, name: 'Диагностика двигателя', price: 55 },
@@ -36,10 +38,23 @@ type LineItem = {
 };
 
 export default function OrderPage() {
+  const navigate = useNavigate();
   const [selectedServices, setSelectedServices] = useState<LineItem[]>([]);
   const [selectedParts, setSelectedParts] = useState<LineItem[]>([]);
   const [serviceSearch, setServiceSearch] = useState('');
   const [partsSearch, setPartsSearch] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [model, setModel] = useState('');
+  const [year, setYear] = useState('');
+  const [vin, setVin] = useState('');
+  const [regNumber, setRegNumber] = useState('');
+  const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [successId, setSuccessId] = useState<number | null>(null);
 
   const addService = (s: typeof serviceList[0]) => {
     setSelectedServices(prev => {
@@ -87,6 +102,49 @@ export default function OrderPage() {
     );
   };
 
+  const handleSubmit = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setSuccessId(null);
+
+    try {
+      const data = await orderApi.createOrder({
+        comment: comment || undefined,
+        vehicle: vin ? {
+          model,
+          year: Number(year) || 0,
+          vinNumber: vin,
+          registrationNumber: regNumber,
+        } : undefined,
+        services: selectedServices.map(s => ({
+          serviceName: s.name,
+          priceAtSale: s.price,
+          quantity: s.qty,
+          serviceDescription: undefined,
+        })),
+        details: selectedParts.map(p => ({
+          detailName: p.name,
+          quantity: p.qty,
+          priceAtSale: p.price,
+          detailDescription: undefined,
+        })),
+      });
+      setSuccessId(data.id);
+      setSelectedServices([]);
+      setSelectedParts([]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ошибка при создании заказа');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const total = [...selectedServices, ...selectedParts].reduce((sum, item) => sum + item.price * item.qty, 0);
 
   const filteredServices = serviceList.filter(s =>
@@ -111,24 +169,24 @@ export default function OrderPage() {
             <div className="order-page__section">
               <h2>Информация о клиенте</h2>
               <div className="order-page__form-row">
-                <input type="text" className="order-page__input" placeholder="Ваше имя" />
-                <input type="tel" className="order-page__input" placeholder="Телефон" />
+                <input type="text" className="order-page__input" placeholder="Ваше имя" value={name} onChange={e => setName(e.target.value)} />
+                <input type="tel" className="order-page__input" placeholder="Телефон" value={phone} onChange={e => setPhone(e.target.value)} />
               </div>
               <div className="order-page__form-row">
-                <input type="email" className="order-page__input" placeholder="Email" />
-                <input type="text" className="order-page__input" placeholder="Адрес" />
+                <input type="email" className="order-page__input" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+                <input type="text" className="order-page__input" placeholder="Адрес" value={address} onChange={e => setAddress(e.target.value)} />
               </div>
             </div>
 
             <div className="order-page__section">
               <h2>Информация об автомобиле</h2>
               <div className="order-page__form-row">
-                <input type="text" className="order-page__input" placeholder="Марка и модель" />
-                <input type="number" className="order-page__input" placeholder="Год выпуска" />
+                <input type="text" className="order-page__input" placeholder="Марка и модель" value={model} onChange={e => setModel(e.target.value)} />
+                <input type="number" className="order-page__input" placeholder="Год выпуска" value={year} onChange={e => setYear(e.target.value)} />
               </div>
               <div className="order-page__form-row">
-                <input type="text" className="order-page__input" placeholder="VIN номер" />
-                <input type="text" className="order-page__input" placeholder="Госномер" />
+                <input type="text" className="order-page__input" placeholder="VIN номер" value={vin} onChange={e => setVin(e.target.value)} />
+                <input type="text" className="order-page__input" placeholder="Госномер" value={regNumber} onChange={e => setRegNumber(e.target.value)} />
               </div>
             </div>
 
@@ -210,7 +268,7 @@ export default function OrderPage() {
 
             <div className="order-page__section">
               <h2>Комментарий</h2>
-              <textarea className="order-page__textarea" placeholder="Опишите проблему или оставьте дополнительные пожелания..." rows={4} />
+              <textarea className="order-page__textarea" placeholder="Опишите проблему или оставьте дополнительные пожелания..." rows={4} value={comment} onChange={e => setComment(e.target.value)} />
             </div>
           </div>
 
@@ -257,10 +315,24 @@ export default function OrderPage() {
                 <span className="order-page__summary-total-price">{formatPrice(total)}</span>
               </div>
 
-              <button className="btn btn-primary order-page__submit" onClick={() => alert('Заказ отправлен!')}>
-                Оформить заказ
-              </button>
-              <p className="order-page__note">Наш менеджер свяжется с вами для подтверждения</p>
+              {error && <div className="order-page__error">{error}</div>}
+
+              {successId ? (
+                <div className="order-page__success">
+                  <h4>Заказ #{successId} создан!</h4>
+                  <p>Наш менеджер свяжется с вами для подтверждения</p>
+                  <button className="btn btn-primary order-page__submit" onClick={() => navigate('/account')}>
+                    Перейти к заказам
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <button className="btn btn-primary order-page__submit" onClick={handleSubmit} disabled={loading}>
+                    {loading ? 'Отправка...' : 'Оформить заказ'}
+                  </button>
+                  <p className="order-page__note">Наш менеджер свяжется с вами для подтверждения</p>
+                </>
+              )}
             </div>
           </div>
         </div>

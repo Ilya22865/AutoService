@@ -65,6 +65,47 @@ interface LoginResponse {
     fullName: string
 }
 
+interface OrderResponse {
+    id: number,
+    status: string,
+    totalAmount: number
+}
+
+export interface OrderRequest {
+    vehicle?: VehicleDto
+    services: OrderServiceDto[]
+    details: OrderDetailsDto[]
+    comment?: string
+}
+
+export interface VehicleDto {
+    model: string,
+    year: number
+    vinNumber: string
+    registrationNumber: string
+}
+
+export interface OrderServiceDto {
+    serviceName: string,
+    priceAtSale: number
+    quantity: number
+    serviceDescription?: string
+}
+
+export interface OrderDetailsDto {
+    detailName: string
+    quantity: number
+    priceAtSale: number
+    detailDescription?: string
+}
+
+export const orderApi = {
+    createOrder: (data: OrderRequest) => request<OrderResponse>('/order/addOrder', {
+        method: 'POST',
+        body: JSON.stringify(data),
+    }),
+}
+
 export const authApi = {
     register: (data: {
         fullName: string,
