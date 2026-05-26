@@ -104,6 +104,10 @@ export const catalogApi = {
     getDetails: () => request<{ id: number; name: string; description: string; price: number; category: string | null }[]>('/catalog/details'),
 }
 
+export const clientApi = {
+    getProfile: () => request<{ fullName: string; email: string; phoneNumber: string | null; address: string | null }>('/client/profile'),
+}
+
 export const orderApi = {
     createOrder: (data: OrderRequest) => request<OrderResponse>('/order/addOrder', {
         method: 'POST',

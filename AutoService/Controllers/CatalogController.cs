@@ -25,11 +25,11 @@ namespace AutoService.Controllers
                     .Include(s => s.Category)
                     .Select(s => new { s.Id, s.Name, s.Description, s.Price, Category = s.Category != null ? s.Category.Name : null })
                    .ToListAsync();
-                   _logger.LogInformation($"[{DateTime.Now}] Услуги загружены в систему.");
+                   _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Услуги загружены в систему.");
                    return Ok(services);
             }
             catch (Exception ex) {
-                _logger.LogError($"[{DateTime.Now}] Ошибка при загрузке услуг: {ex.Message}");
+                _logger.LogError($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Ошибка при загрузке услуг: {ex.Message}");
                 return StatusCode(500, "Ошибка при загрузке услуг.");
             }
         }
@@ -42,11 +42,11 @@ namespace AutoService.Controllers
                     .Include(d => d.Category)
                     .Select(d => new { d.Id, d.Name, d.Description, d.Price, Category = d.Category != null ? d.Category.Name : null })
                     .ToListAsync();
-                _logger.LogInformation($"[{DateTime.Now}] Детали загружены в систему.");
+                _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Детали загружены в систему.");
                 return Ok(details);
             }
             catch (Exception ex) {
-                _logger.LogError($"[{DateTime.Now}] Ошибка при загрузке деталей: {ex.Message}");
+                _logger.LogError($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Ошибка при загрузке деталей: {ex.Message}");
                 return StatusCode(500, "Ошибка при загрузке деталей.");
             }
         }

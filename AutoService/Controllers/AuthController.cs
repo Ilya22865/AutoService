@@ -38,13 +38,13 @@ namespace AutoService.Controllers
                     return Unauthorized("Неверный логин или пароль!");
                 }
 
-                _logger.LogInformation($"[{DateTime.Now}] Пользователь [Id: {user.Id}] {user.FullName} успешно вошел в систему.");
+                _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Пользователь [Id: {user.Id}] успешно вошел в систему.");
                 var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, user.Role);
                 return Ok(new { token, user.Id, user.Email, user.FullName, role = user.Role.ToString() });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"[{DateTime.Now}] Ошибка при входе в систему: {ex.Message}");
+                _logger.LogError($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Ошибка при входе в систему: {ex.Message}");
                 return StatusCode(500, "Ошибка при входе в систему.");
             }
         }
@@ -97,7 +97,7 @@ namespace AutoService.Controllers
                         _context.Employees.Add(employee);
                         await _context.SaveChangesAsync();
 
-                        _logger.LogInformation($"[{DateTime.Now}] Пользователь {employeeUs.FullName} успешно зарегистрирован как сотрудник.");
+                        _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Пользователь {employeeUs.FullName} успешно зарегистрирован как сотрудник.");
                         var employeeToken = await _tokenGeneratorService.GenerateTokenServiceAsync(employeeUs.Id, employeeUs.Email, employeeUs.FullName, UserRole.Employee);
                         return Ok(new { token = employeeToken, id = employeeUs.Id, fullName = employeeUs.FullName, salary = employee.Salary, position = employee.Position, role = "Employee" });
                     }
@@ -108,7 +108,7 @@ namespace AutoService.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"[{DateTime.Now}] Сотрудник {dto.FullName} ввел неверный код доступа или кто-то попытался получить доступ: {ex.Message}");
+                    _logger.LogError($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Сотрудник {dto.FullName} ввел неверный код доступа или кто-то попытался получить доступ: {ex.Message}");
                     return StatusCode(500, "Ошибка при регистрации сотрудника.");
                 }
             }
@@ -136,13 +136,13 @@ namespace AutoService.Controllers
                 _context.Clients.Add(client);
                 await _context.SaveChangesAsync();
 
-                _logger.LogInformation($"[{DateTime.Now}] Пользователь {user.FullName} успешно зарегистрирован как клиент.");
+                _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Пользователь [Id: {user.Id}] успешно зарегистрирован как клиент.");
                 var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, UserRole.Client);
                 return Ok(new { token, user.Id, user.Email, user.FullName, client.Address, client.PhoneNumber, role = "Client" });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"[{DateTime.Now}] Ошибка при регистрации пользователя: {dto.FullName}.");
+                _logger.LogError(ex, $"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Ошибка при регистрации пользователя: {dto.FullName}.");
                 return StatusCode(500, "Ошибка при регистрации пользователя.");
             }
         }

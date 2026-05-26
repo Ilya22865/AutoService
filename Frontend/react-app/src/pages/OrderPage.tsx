@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { orderApi, catalogApi } from '../api';
+import { orderApi, catalogApi, clientApi } from '../api';
 
 type LineItem = {
   id: number;
@@ -33,6 +33,18 @@ export default function OrderPage() {
   const [successId, setSuccessId] = useState<number | null>(null);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const raw = atob(token.split('.')[1]);
+        const utf8 = decodeURIComponent(escape(raw));
+        const payload = JSON.parse(utf8);
+        const n = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || payload.unique_name || payload.name;
+        const e = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || payload.email;
+        if (n) setName(n);
+        if (e) setEmail(e);
+      } catch {}
+    }
     catalogApi.getServices().then(data =>
       setServices(data.map(s => ({ id: s.id, name: s.name, price: s.price })))
     ).catch(() => {});
