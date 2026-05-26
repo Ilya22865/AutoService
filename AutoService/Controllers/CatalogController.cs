@@ -24,9 +24,9 @@ namespace AutoService.Controllers
                 var services = await _context.Services
                     .Include(s => s.Category)
                     .Select(s => new { s.Id, s.Name, s.Description, s.Price, Category = s.Category != null ? s.Category.Name : null })
-                   .ToListAsync();
-                   _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Услуги загружены в систему.");
-                   return Ok(services);
+                    .ToListAsync();
+                _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Услуги загружены в систему.");
+                return Ok(services);
             }
             catch (Exception ex) {
                 _logger.LogError($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Ошибка при загрузке услуг: {ex.Message}");

@@ -35,7 +35,7 @@ namespace AutoService.Controllers
                 var user = _context.Users.FirstOrDefault(u => u.Email == dto.Email);
                 if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
                 {
-                    return Unauthorized("Неверный логин или пароль!");
+                    throw new Exception("Неверный логин или пароль!");
                 }
 
                 _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Пользователь [Id: {user.Id}] успешно вошел в систему.");
@@ -45,7 +45,7 @@ namespace AutoService.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Ошибка при входе в систему: {ex.Message}");
-                return StatusCode(500, "Ошибка при входе в систему.");
+                return Unauthorized(ex.Message);
             }
         }
 
@@ -103,13 +103,13 @@ namespace AutoService.Controllers
                     }
                     else
                     {
-                        return BadRequest(new { message = "Неверный код доступа!" });
+                        throw new Exception("Неверный код доступа!");
                     }
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Сотрудник {dto.FullName} ввел неверный код доступа или кто-то попытался получить доступ: {ex.Message}");
-                    return StatusCode(500, "Ошибка при регистрации сотрудника.");
+                    return BadRequest(ex.Message);
                 }
             }
 
