@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoService.Data;
-
+using AutoService.DTOs.DetailsAndServicesDto;
 namespace AutoService.Controllers
 {
     [ApiController]
