@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using AutoService.DTOs.Auth;
 using AutoService.Data;
 using AutoService.Models.Users;
 using AutoService.Services.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoService.Controllers
@@ -36,7 +38,7 @@ namespace AutoService.Controllers
                     return Unauthorized("Неверный логин или пароль!");
                 }
 
-                _logger.LogInformation($"[{DateTime.Now}] Пользователь c Email {dto.Email} успешно вошел в систему.");
+                _logger.LogInformation($"[{DateTime.Now}] Пользователь [Id: {user.Id}] {user.FullName} успешно вошел в систему.");
                 var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, user.Role);
                 return Ok(new { token, user.Id, user.Email, user.FullName, role = user.Role.ToString() });
             }
@@ -144,7 +146,7 @@ namespace AutoService.Controllers
                 return StatusCode(500, "Ошибка при регистрации пользователя.");
             }
         }
-
+        
         private static string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
