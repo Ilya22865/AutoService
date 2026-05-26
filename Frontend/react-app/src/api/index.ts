@@ -28,7 +28,7 @@ async function request<T>(
             const ct = res.headers.get('content-type') || '';
             if (ct.includes('application/json')) {
                 const json = await res.json();
-                msg = json.message || json.title || JSON.stringify(json.errors) || msg;
+                msg = typeof json === 'string' ? json : json.message || json.title || JSON.stringify(json.errors) || msg;
             } else {
                 msg = await res.text();
             }

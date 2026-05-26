@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoService.Data;
 using AutoService.DTOs.DetailsAndServicesDto;
+using AutoService.Services.OrderServices;
+
 namespace AutoService.Controllers
 {
     [ApiController]
@@ -16,11 +18,13 @@ namespace AutoService.Controllers
         private readonly ILogger<OrderController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
-        public OrderController(ApplicationDbContext context, IConfiguration configuration, ILogger<OrderController> logger)
+        private readonly IOrderViewService _orderService;
+        public OrderController(ApplicationDbContext context, IConfiguration configuration, ILogger<OrderController> logger, IOrderViewService orderService)
         {
             _context = context;
             _configuration = configuration;
             _logger = logger;
+            _orderService = orderService;
         }
 
         [Authorize]
@@ -68,6 +72,7 @@ namespace AutoService.Controllers
                 Comment = dto.Comment ?? null,
                 CreatedAt = DateTime.Now
             };
+            
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
@@ -116,6 +121,29 @@ namespace AutoService.Controllers
                 Status = order.Status.ToString(),
                 order.TotalAmount
             });
+        }
+
+        [Authorize]
+        [HttpGet("getOrders")]
+        public async Task<IActionResult> GetOrdersAsync()
+        {
+            try {
+                var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                var userId = int.Parse(userClaim!.Value);
+                var role = User.FindFirst(ClaimTypes.Role)?.Value;
+                if (role == null) throw new UnauthorizedAccessException("Роль не определена.");
+
+                IEnumerable<OrderDto> orders;
+
+                if(role == "Employee") orders = await _orderService.GetOrdersAsync();
+                else orders = await _orderService.GetOrdersAsync(userId);
+                
+                return Ok(orders);
+            }
+            catch (UnauthorizedAccessException ex) {
+                _logger.LogError(ex, "Ошибка при получении заказов.");
+                return Unauthorized(ex.Message);
+            }
         }
     }
 }

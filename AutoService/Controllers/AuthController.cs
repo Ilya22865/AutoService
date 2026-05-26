@@ -90,7 +90,7 @@ namespace AutoService.Controllers
                         var employee = new Employee
                         {
                             Salary = dto.Salary,
-                            Position = dto.Position,
+                            Position = dto.Position ?? "",
                             UserId = employeeUs.Id
                         };
 
