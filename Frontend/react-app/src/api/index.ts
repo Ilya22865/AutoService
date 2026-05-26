@@ -99,6 +99,11 @@ export interface OrderDetailsDto {
     detailDescription?: string
 }
 
+export const catalogApi = {
+    getServices: () => request<{ id: number; name: string; description: string; price: number; category: string | null }[]>('/catalog/services'),
+    getDetails: () => request<{ id: number; name: string; description: string; price: number; category: string | null }[]>('/catalog/details'),
+}
+
 export const orderApi = {
     createOrder: (data: OrderRequest) => request<OrderResponse>('/order/addOrder', {
         method: 'POST',

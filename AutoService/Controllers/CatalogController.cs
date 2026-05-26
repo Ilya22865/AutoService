@@ -30,7 +30,7 @@ namespace AutoService.Controllers
         {
             var details = await _context.Details
                 .Include(d => d.Category)
-                .Select(d => new { d.Id, d.Name, d.Description, Category = d.Category != null ? d.Category.Name : null })
+                .Select(d => new { d.Id, d.Name, d.Description, d.Price, Category = d.Category != null ? d.Category.Name : null })
                 .ToListAsync();
             return Ok(details);
         }

@@ -1,4 +1,5 @@
 using AutoService.Models.Catalog;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AutoService.Models.Order
 {
@@ -10,6 +11,7 @@ namespace AutoService.Models.Order
         public int DetailId { get; set; }
         public Detail? Detail { get; set; }
         public int Quantity { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
         public decimal PriceAtSale { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 using AutoService.Models.Catalog;
 using AutoService.Models.Users;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AutoService.Models.Order
 {
@@ -13,6 +14,7 @@ namespace AutoService.Models.Order
         public int? EmployeeId { get; set; }
         public Employee? Employee { get; set; }
         public int Quantity { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
         public decimal PriceAtSale { get; set; }
     }
 }

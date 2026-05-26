@@ -1,34 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { orderApi } from '../api';
-
-const serviceList = [
-  { id: 1, name: 'Диагностика двигателя', price: 55 },
-  { id: 2, name: 'Компьютерная диагностика', price: 45 },
-  { id: 3, name: 'Замена масла и фильтров', price: 35 },
-  { id: 4, name: 'Замена тормозных колодок', price: 80 },
-  { id: 5, name: 'Ремонт ходовой части', price: 140 },
-  { id: 6, name: 'Замена сайлентблоков', price: 95 },
-  { id: 7, name: 'Ремонт двигателя', price: 200 },
-  { id: 8, name: 'Замена ремня ГРМ', price: 120 },
-  { id: 9, name: 'Ремонт кондиционера', price: 160 },
-  { id: 10, name: 'Замена свечей зажигания', price: 40 },
-];
-
-const partsList = [
-  { id: 1, name: 'Масло моторное 5W-40 4л', price: 85 },
-  { id: 2, name: 'Фильтр масляный', price: 30 },
-  { id: 3, name: 'Фильтр воздушный', price: 22 },
-  { id: 4, name: 'Фильтр салона', price: 25 },
-  { id: 5, name: 'Колодки тормозные передние', price: 120 },
-  { id: 6, name: 'Колодки тормозные задние', price: 110 },
-  { id: 7, name: 'Свеча зажигания', price: 15 },
-  { id: 8, name: 'Ремень ГРМ', price: 65 },
-  { id: 9, name: 'Сайлентблок переднего рычага', price: 45 },
-  { id: 10, name: 'Шаровая опора', price: 70 },
-  { id: 11, name: 'Амортизатор передний', price: 170 },
-  { id: 12, name: 'Аккумулятор 60Ah', price: 200 },
-];
+import { orderApi, catalogApi } from '../api';
 
 type LineItem = {
   id: number;
@@ -37,8 +9,12 @@ type LineItem = {
   qty: number;
 };
 
+type CatalogItem = { id: number; name: string; price: number };
+
 export default function OrderPage() {
   const navigate = useNavigate();
+  const [services, setServices] = useState<CatalogItem[]>([]);
+  const [parts, setParts] = useState<CatalogItem[]>([]);
   const [selectedServices, setSelectedServices] = useState<LineItem[]>([]);
   const [selectedParts, setSelectedParts] = useState<LineItem[]>([]);
   const [serviceSearch, setServiceSearch] = useState('');
@@ -56,7 +32,16 @@ export default function OrderPage() {
   const [error, setError] = useState('');
   const [successId, setSuccessId] = useState<number | null>(null);
 
-  const addService = (s: typeof serviceList[0]) => {
+  useEffect(() => {
+    catalogApi.getServices().then(data =>
+      setServices(data.map(s => ({ id: s.id, name: s.name, price: s.price })))
+    ).catch(() => {});
+    catalogApi.getDetails().then(data =>
+      setParts(data.map(d => ({ id: d.id, name: d.name, price: d.price })))
+    ).catch(() => {});
+  }, []);
+
+  const addService = (s: CatalogItem) => {
     setSelectedServices(prev => {
       const existing = prev.find(item => item.id === s.id);
       if (existing) {
@@ -79,7 +64,7 @@ export default function OrderPage() {
     );
   };
 
-  const addPart = (p: typeof partsList[0]) => {
+  const addPart = (p: CatalogItem) => {
     setSelectedParts(prev => {
       const existing = prev.find(item => item.id === p.id);
       if (existing) {
@@ -102,6 +87,8 @@ export default function OrderPage() {
     );
   };
 
+  const phoneRegex = /^[\+\d\s\-\(\)]{7,20}$/;
+
   const handleSubmit = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -112,6 +99,24 @@ export default function OrderPage() {
     setLoading(true);
     setError('');
     setSuccessId(null);
+
+    if (!phoneRegex.test(phone)) {
+      setError('Укажите корректный номер телефона');
+      setLoading(false);
+      return;
+    }
+
+    if (!email) {
+      setError('Укажите email');
+      setLoading(false);
+      return;
+    }
+
+    if (selectedServices.length === 0 && selectedParts.length === 0) {
+      setError('Добавьте хотя бы одну услугу или деталь');
+      setLoading(false);
+      return;
+    }
 
     try {
       const data = await orderApi.createOrder({
@@ -147,10 +152,10 @@ export default function OrderPage() {
 
   const total = [...selectedServices, ...selectedParts].reduce((sum, item) => sum + item.price * item.qty, 0);
 
-  const filteredServices = serviceList.filter(s =>
+  const filteredServices = services.filter(s =>
     s.name.toLowerCase().includes(serviceSearch.toLowerCase())
   );
-  const filteredParts = partsList.filter(p =>
+  const filteredParts = parts.filter(p =>
     p.name.toLowerCase().includes(partsSearch.toLowerCase())
   );
 

@@ -6,6 +6,6 @@ namespace AutoService.DTOs.Order
         public int Quantity { get; set; }
         public decimal PriceAtSale { get; set; }
         public decimal TotalPrice => Quantity * PriceAtSale;
-        public string DetailDescription { get; set; } = null!;
+        public string? DetailDescription { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using AutoService.Models.Users;
 
 namespace AutoService.Models.Order
@@ -16,7 +17,8 @@ namespace AutoService.Models.Order
         public int? ClientId { get; set; }
         public string? Comment { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public Client? Client { get; set; }
+        public Client? Client { get; set; }       
+        [Column(TypeName = "decimal(10,2)")]
         public decimal TotalAmount { get; set; }
         public int? VehicleId { get; set; }
         public Vehicle? Vehicle { get; set; }
