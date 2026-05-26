@@ -10,30 +10,41 @@ namespace AutoService.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
+        private readonly ILogger<AuthController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly IEmailValidator _emailValidatorService;
         private readonly ITokenGenerator _tokenGeneratorService;
 
-        public AuthController(ApplicationDbContext context, IConfiguration configuration, IEmailValidator emailValidatorService, ITokenGenerator tokenGeneratorService)
+        public AuthController(ApplicationDbContext context, IConfiguration configuration, IEmailValidator emailValidatorService, ITokenGenerator tokenGeneratorService, ILogger<AuthController> logger)
         {
             _context = context;
             _configuration = configuration;
             _emailValidatorService = emailValidatorService;
             _tokenGeneratorService = tokenGeneratorService;
+            _logger = logger;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == dto.Email);
-            if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
+            try
             {
-                return Unauthorized("Неверный логин или пароль!");
-            }
+                var user = _context.Users.FirstOrDefault(u => u.Email == dto.Email);
+                if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
+                {
+                    return Unauthorized("Неверный логин или пароль!");
+                }
 
-            var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, user.Role);
-            return Ok(new { token, user.Id, user.Email, user.FullName, role = user.Role.ToString() });
+                _logger.LogInformation($"[{DateTime.Now}] Пользователь c Email {dto.Email} успешно вошел в систему.");
+                var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, user.Role);
+                return Ok(new { token, user.Id, user.Email, user.FullName, role = user.Role.ToString() });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[{DateTime.Now}] Ошибка при входе в систему: {ex.Message}");
+                return StatusCode(500, "Ошибка при входе в систему.");
+            }
         }
 
         [HttpPost("register")]
@@ -52,7 +63,7 @@ namespace AutoService.Controllers
             {
                 return BadRequest("Такой пользователь уже существует!");
             }
-        
+
             bool isEmailValid = await _emailValidatorService.IsValidAsync(dto.Email, hunterApiKey ?? "");
             if (!isEmailValid)
             {
@@ -60,60 +71,78 @@ namespace AutoService.Controllers
             }
             if (!string.IsNullOrEmpty(dto.EmployeeCode))
             {
-                if (dto.EmployeeCode == ADMIN_CODE)
+                try
                 {
-                    var employeeUs = new User
+                    if (dto.EmployeeCode == ADMIN_CODE)
                     {
-                        FullName = dto.FullName,
-                        Email = dto.Email,
-                        PasswordHash = HashPassword(dto.Password),
-                        Role = UserRole.Employee
-                    };
-                    _context.Users.Add(employeeUs);
-                    await _context.SaveChangesAsync();
+                        var employeeUs = new User
+                        {
+                            FullName = dto.FullName,
+                            Email = dto.Email,
+                            PasswordHash = HashPassword(dto.Password),
+                            Role = UserRole.Employee
+                        };
+                        _context.Users.Add(employeeUs);
+                        await _context.SaveChangesAsync();
 
-                    var employee = new Employee
+                        var employee = new Employee
+                        {
+                            Salary = dto.Salary,
+                            Position = dto.Position,
+                            UserId = employeeUs.Id
+                        };
+
+                        _context.Employees.Add(employee);
+                        await _context.SaveChangesAsync();
+
+                        _logger.LogInformation($"[{DateTime.Now}] Пользователь {employeeUs.FullName} успешно зарегистрирован как сотрудник.");
+                        var employeeToken = await _tokenGeneratorService.GenerateTokenServiceAsync(employeeUs.Id, employeeUs.Email, employeeUs.FullName, UserRole.Employee);
+                        return Ok(new { token = employeeToken, id = employeeUs.Id, fullName = employeeUs.FullName, salary = employee.Salary, position = employee.Position, role = "Employee" });
+                    }
+                    else
                     {
-                        Salary = dto.Salary,
-                        Position = dto.Position,
-                        UserId = employeeUs.Id
-                    };
-
-                    _context.Employees.Add(employee);
-                    await _context.SaveChangesAsync();
-
-                    var employeeToken = await _tokenGeneratorService.GenerateTokenServiceAsync(employeeUs.Id, employeeUs.Email, employeeUs.FullName, UserRole.Employee);
-                    return Ok(new { token = employeeToken, id = employeeUs.Id, fullName = employeeUs.FullName, salary = employee.Salary, position = employee.Position, role = "Employee" });
+                        return BadRequest(new { message = "Неверный код доступа!" });
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return BadRequest(new { message = "Неверный код доступа!" });
+                    _logger.LogError($"[{DateTime.Now}] Сотрудник {dto.FullName} ввел неверный код доступа или кто-то попытался получить доступ: {ex.Message}");
+                    return StatusCode(500, "Ошибка при регистрации сотрудника.");
                 }
             }
 
-            var user = new User
+            try
             {
-                FullName = dto.FullName,
-                Email = dto.Email,
-                PasswordHash = HashPassword(dto.Password),
-                Role = UserRole.Client
-            };
+                var user = new User
+                {
+                    FullName = dto.FullName,
+                    Email = dto.Email,
+                    PasswordHash = HashPassword(dto.Password),
+                    Role = UserRole.Client
+                };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
 
-            var client = new Client
+                var client = new Client
+                {
+                    Address = dto.Address,
+                    PhoneNumber = dto.PhoneNumber,
+                    UserId = user.Id
+                };
+
+                _context.Clients.Add(client);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation($"[{DateTime.Now}] Пользователь {user.FullName} успешно зарегистрирован как клиент.");
+                var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, UserRole.Client);
+                return Ok(new { token, user.Id, user.Email, user.FullName, client.Address, client.PhoneNumber, role = "Client" });
+            }
+            catch (Exception ex)
             {
-                Address = dto.Address,
-                PhoneNumber = dto.PhoneNumber,
-                UserId = user.Id
-            };
-
-            _context.Clients.Add(client);
-            await _context.SaveChangesAsync();
-
-            var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, UserRole.Client);
-            return Ok(new { token, user.Id, user.Email, user.FullName, client.Address, client.PhoneNumber, role = "Client" });
+                _logger.LogError(ex, $"[{DateTime.Now}] Ошибка при регистрации пользователя: {dto.FullName}.");
+                return StatusCode(500, "Ошибка при регистрации пользователя.");
+            }
         }
 
         private static string HashPassword(string password)

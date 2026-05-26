@@ -13,12 +13,14 @@ namespace AutoService.Controllers
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
+        private readonly ILogger<OrderController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
-        public OrderController(ApplicationDbContext context, IConfiguration configuration)
+        public OrderController(ApplicationDbContext context, IConfiguration configuration, ILogger<OrderController> logger)
         {
             _context = context;
             _configuration = configuration;
+            _logger = logger;
         }
 
         [Authorize]
@@ -105,6 +107,8 @@ namespace AutoService.Controllers
             }
 
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"[{order.CreatedAt}] Пользователь ID[{userIdClaim}] создал заказ {order.Id} на сумму {order.TotalAmount} рублей.");
 
             return Ok(new
             {
