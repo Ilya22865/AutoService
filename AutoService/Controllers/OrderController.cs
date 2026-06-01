@@ -17,12 +17,10 @@ namespace AutoService.Controllers
     {
         private readonly ILogger<OrderController> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly IConfiguration _configuration;
         private readonly IOrderViewService _orderService;
-        public OrderController(ApplicationDbContext context, IConfiguration configuration, ILogger<OrderController> logger, IOrderViewService orderService)
+        public OrderController(ApplicationDbContext context, ILogger<OrderController> logger, IOrderViewService orderService)
         {
             _context = context;
-            _configuration = configuration;
             _logger = logger;
             _orderService = orderService;
         }

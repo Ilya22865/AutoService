@@ -65,10 +65,22 @@ interface LoginResponse {
     fullName: string
 }
 
-interface OrderResponse {
-    id: number,
-    status: string,
-    totalAmount: number
+export interface ClientDto {
+    fullName: string;
+    email: string;
+    address: string;
+    phoneNumber: string;
+    vehicles: VehicleDto[];
+}
+
+export interface OrderDto {
+    orderId: number;
+    status: string;
+    client: ClientDto | null;
+    vehicle: VehicleDto | null;
+    services: OrderServiceDto[];
+    details: OrderDetailsDto[];
+    comment: string | null;
 }
 
 export interface OrderRequest {
@@ -109,9 +121,20 @@ export const clientApi = {
 }
 
 export const orderApi = {
-    createOrder: (data: OrderRequest) => request<OrderResponse>('/order/addOrder', {
+    createOrder: (data: OrderRequest) => request<{ id: number; status: string; totalAmount: number }>('/order/addOrder', {
         method: 'POST',
         body: JSON.stringify(data),
+    }),
+}
+
+export const getOrdersApi = {
+    getOrders: () => request<OrderDto[]>('/order/getOrders', {
+        method: 'GET',
+    }),
+}
+export const logApi = {
+    download: () => fetch(`${API_URL}/log/download`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` },
     }),
 }
 

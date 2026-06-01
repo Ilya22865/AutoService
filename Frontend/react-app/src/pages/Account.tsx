@@ -1,18 +1,11 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getOrdersApi, clientApi, type OrderDto } from '../api';
 
-const mockOrders = [
-  { id: 201, date: '19.05.2026', car: 'Toyota Camry 2020', service: 'Диагностика двигателя', status: 'В работе', amount: '55 Br' },
-  { id: 202, date: '12.05.2026', car: 'Toyota Camry 2020', service: 'Замена масла', status: 'Завершён', amount: '90 Br' },
-  { id: 203, date: '28.04.2026', car: 'Toyota Camry 2020', service: 'Ремонт ходовой', status: 'Завершён', amount: '200 Br' },
-];
-
-const statusColor: Record<string, string> = {
-  'В работе': 'blue',
-  'Ожидает': 'yellow',
-  'Подтверждён': 'blue',
-  'Готов': 'green',
-  'Завершён': 'green',
-  'Отменён': 'red',
+const statusMap: Record<string, { label: string; color: string }> = {
+  'Pending': { label: 'Ожидает', color: 'yellow' },
+  'Completed': { label: 'Завершён', color: 'green' },
+  'Cancelled': { label: 'Отменён', color: 'red' },
 };
 
 function getUserName(): string {
@@ -29,7 +22,17 @@ function getUserName(): string {
 }
 
 export default function Account() {
-  const name = getUserName();
+  const [orders, setOrders] = useState<OrderDto[]>([]);
+  const [profile, setProfile] = useState<{ fullName: string; email: string; phoneNumber: string | null; address: string | null } | null>(null);
+
+  useEffect(() => {
+    getOrdersApi.getOrders().then(setOrders).catch(console.error);
+    clientApi.getProfile().then(setProfile).catch(() => {});
+  }, []);
+
+  const name = profile?.fullName ?? getUserName();
+  const completed = orders.filter(o => o.status === 'Completed').length;
+  const inProgress = orders.filter(o => o.status === 'Pending').length;
 
   return (
     <div className="emp-main" style={{ minHeight: 'calc(100vh - 120px)' }}>
@@ -51,7 +54,7 @@ export default function Account() {
               </svg>
             </div>
             <div className="emp-stat__info">
-              <span className="emp-stat__value">{mockOrders.length}</span>
+              <span className="emp-stat__value">{orders.length}</span>
               <span className="emp-stat__label">Всего заказов</span>
             </div>
           </div>
@@ -63,7 +66,7 @@ export default function Account() {
               </svg>
             </div>
             <div className="emp-stat__info">
-              <span className="emp-stat__value">{mockOrders.filter(o => o.status === 'Завершён').length}</span>
+              <span className="emp-stat__value">{completed}</span>
               <span className="emp-stat__label">Выполнено</span>
             </div>
           </div>
@@ -75,7 +78,7 @@ export default function Account() {
               </svg>
             </div>
             <div className="emp-stat__info">
-              <span className="emp-stat__value">{mockOrders.filter(o => o.status === 'В работе' || o.status === 'Ожидает').length}</span>
+              <span className="emp-stat__value">{inProgress}</span>
               <span className="emp-stat__label">В обработке</span>
             </div>
           </div>
@@ -87,24 +90,25 @@ export default function Account() {
             <thead>
               <tr>
                 <th>№</th>
-                <th>Дата</th>
                 <th>Автомобиль</th>
-                <th>Услуга</th>
+                <th>Услуги</th>
                 <th>Статус</th>
                 <th>Сумма</th>
               </tr>
             </thead>
             <tbody>
-              {mockOrders.map(order => (
-                <tr key={order.id}>
-                  <td className="emp-table__id">#{order.id}</td>
-                  <td>{order.date}</td>
-                  <td>{order.car}</td>
-                  <td>{order.service}</td>
-                  <td><span className={`emp-badge emp-badge--${statusColor[order.status] || 'gray'}`}>{order.status}</span></td>
-                  <td className="emp-table__price">{order.amount}</td>
-                </tr>
-              ))}
+              {orders.map(order => {
+                const st = statusMap[order.status] ?? { label: order.status, color: 'gray' };
+                return (
+                  <tr key={order.orderId}>
+                    <td className="emp-table__id">#{order.orderId}</td>
+                    <td>{order.vehicle ? `${order.vehicle.model}` : '—'}</td>
+                    <td>{order.services.map(s => s.serviceName).join(', ')}</td>
+                    <td><span className={`emp-badge emp-badge--${st.color}`}>{st.label}</span></td>
+                    <td className="emp-table__price">{order.services.reduce((s, x) => s + x.priceAtSale * x.quantity, 0) + order.details.reduce((s, x) => s + x.priceAtSale * x.quantity, 0)} Br</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -114,10 +118,14 @@ export default function Account() {
           <div className="acc-info">
             <div className="acc-info__avatar">{name.charAt(0)}</div>
             <div className="acc-info__body">
-              <div className="acc-info__name">{name}</div>
-              <div className="acc-info__detail">ivan@example.com</div>
-              <div className="acc-info__detail">+375(29)123-45-67</div>
-              <div className="acc-info__detail">г. Витебск, ул. Гагарина 41А, 422к</div>
+              <div className="acc-info__name">{profile?.fullName ?? name}</div>
+              {profile && (
+                <>
+                  <div className="acc-info__detail">{profile.email}</div>
+                  <div className="acc-info__detail">{profile.phoneNumber ?? '—'}</div>
+                  <div className="acc-info__detail">{profile.address ?? '—'}</div>
+                </>
+              )}
             </div>
           </div>
         </div>

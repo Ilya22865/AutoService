@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { orderApi, catalogApi, clientApi } from '../api';
+import { orderApi, catalogApi } from '../api';
 
 type LineItem = {
   id: number;
