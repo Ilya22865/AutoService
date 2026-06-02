@@ -1,4 +1,32 @@
+import { useState, useEffect } from 'react';
+import { catalogApi } from '../api';
+
+type CatalogItem = { id: number; name: string; price: number }
 export default function OrderForm() {
+    const [services, setServices] = useState<CatalogItem[]>([]);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if(token) {
+            try {
+                const raw = atob(token.split('.')[1]);
+                const utf8 = decodeURIComponent(escape(raw));
+                const payload = JSON.parse(utf8);
+                const n = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || payload.unique_name || payload.name;
+                const e = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || payload.email;
+                if (n) setName(n);
+                if (e) setEmail(e);
+            } catch {
+                localStorage.removeItem('token');
+            }
+        }
+        catalogApi.getServices().then(data =>
+            setServices(data.map(s => ({ id: s.id, name: s.name, price: s.price })))
+        ).catch(() => {});
+    }, [])
+
   return (
     <section id="order" className="section order">
       <div className="container">
@@ -35,8 +63,8 @@ export default function OrderForm() {
           </div>
           <form className="order__form" onSubmit={e => e.preventDefault()}>
             <div className="order__form-row">
-              <input type="text" placeholder="Ваше имя" className="order__input" required />
-              <input type="tel" placeholder="Телефон" className="order__input" required />
+              <input type="text" placeholder="Ваше имя" className="order__input" value={name} onChange={e => setName(e.target.value)} />
+              <input type="email" placeholder="Email" className="order__input" value={email} onChange={e => setEmail(e.target.value)} />
             </div>
             <div className="order__form-row">
               <input type="text" placeholder="Марка и модель авто" className="order__input" />
@@ -44,12 +72,9 @@ export default function OrderForm() {
             </div>
             <select className="order__select">
               <option value="">Выберите услугу</option>
-              <option>Диагностика</option>
-              <option>Ремонт двигателя</option>
-              <option>Ремонт ходовой</option>
-              <option>Техобслуживание</option>
-              <option>Ремонт электрики</option>
-              <option>Кузовной ремонт</option>
+              {services.map(s => (
+                <option key={s.id} value={s.id}>{s.name} — {s.price} Br</option>
+              ))}
             </select>
             <textarea className="order__textarea" placeholder="Опишите проблему" rows={3} />
             <button type="submit" className="btn btn-primary order__submit">
