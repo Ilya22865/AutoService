@@ -1631,7 +1631,8 @@ System.InvalidOperationException: Response Content-Length mismatch: too many byt
 2026-06-01 11:13:30.886 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5131/api/log/download - null null
 2026-06-01 11:13:30.908 +03:00 [INF] CORS policy execution successful.
 2026-06-01 11:13:30.911 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5131/api/log/download - 204 null null 27.362ms
-2026-06-01 11:14:20.140 +03:00 [INF] User profile is available. Using '/home/user/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2026-06-01 22:22:01.093 +03:00 [INF] Application is shutting down...
+ '/home/user/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
 2026-06-01 11:14:20.246 +03:00 [INF] Now listening on: http://localhost:5132
 2026-06-01 11:14:20.247 +03:00 [INF] Application started. Press Ctrl+C to shut down.
 2026-06-01 11:14:20.247 +03:00 [INF] Hosting environment: Development
@@ -1644,7 +1645,8 @@ System.InvalidOperationException: Response Content-Length mismatch: too many byt
 RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
 2026-06-01 11:14:23.326 +03:00 [INF] AuthenticationScheme: Bearer was challenged.
 2026-06-01 11:14:23.327 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5132/api/log/download - 401 0 null 25.651ms
-2026-06-01 11:16:14.853 +03:00 [INF] User profile is available. Using '/home/user/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2026-06-01 22:22:01.090 +03:00 [INF] Application is shutting down...
+ '/home/user/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
 2026-06-01 11:16:15.005 +03:00 [INF] Now listening on: http://localhost:5130
 2026-06-01 11:16:15.007 +03:00 [INF] Application started. Press Ctrl+C to shut down.
 2026-06-01 11:16:15.007 +03:00 [INF] Hosting environment: Development
@@ -1734,3 +1736,303 @@ ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0
 2026-06-01 11:16:29.675 +03:00 [INF] Executed endpoint 'AutoService.Controllers.LogController.Download (AutoService)'
 2026-06-01 11:16:29.675 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/log/download - 200 232222 text/plain 21.9116ms
 2026-06-01 11:17:41.866 +03:00 [INF] Application is shutting down...
+2026-06-01 11:21:44.623 +03:00 [INF] User profile is available. Using '/home/user/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2026-06-01 11:21:44.751 +03:00 [INF] Now listening on: http://localhost:5130
+2026-06-01 11:21:44.752 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-01 11:21:44.752 +03:00 [INF] Hosting environment: Development
+2026-06-01 11:21:44.752 +03:00 [INF] Content root path: /home/user/AutoService/AutoService
+2026-06-01 11:21:48.296 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5130/api/order/getOrders - null null
+2026-06-01 11:21:48.318 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:48.322 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5130/api/order/getOrders - 204 null null 27.3252ms
+2026-06-01 11:21:48.325 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/order/getOrders - application/json null
+2026-06-01 11:21:48.327 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:48.397 +03:00 [INF] Executing endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:48.413 +03:00 [INF] Route matched with {action = "GetOrders", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetOrdersAsync() on controller AutoService.Controllers.OrderController (AutoService).
+2026-06-01 11:21:49.403 +03:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-01 11:21:49.504 +03:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `o`.`Id`, `o`.`ClientId`, `o`.`Comment`, `o`.`CreatedAt`, `o`.`Status`, `o`.`TotalAmount`, `o`.`VehicleId`, `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v0`.`Id`, `v0`.`Model`, `v0`.`OwnerId`, `v0`.`RegistrationNumber`, `v0`.`VinNumber`, `v0`.`Year`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`, `s0`.`Id`, `s0`.`EmployeeId`, `s0`.`OrderId`, `s0`.`PriceAtSale`, `s0`.`Quantity`, `s0`.`ServiceId`, `s0`.`Id0`, `s0`.`CategoryId`, `s0`.`Description`, `s0`.`Name`, `s0`.`Price`, `s1`.`Id`, `s1`.`DetailId`, `s1`.`OrderId`, `s1`.`PriceAtSale`, `s1`.`Quantity`, `s1`.`Id0`, `s1`.`CategoryId`, `s1`.`Description`, `s1`.`Name`, `s1`.`Price`
+FROM `Orders` AS `o`
+LEFT JOIN `Clients` AS `c` ON `o`.`ClientId` = `c`.`Id`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `o`.`VehicleId` = `v`.`Id`
+LEFT JOIN `Vehicles` AS `v0` ON `c`.`Id` = `v0`.`OwnerId`
+LEFT JOIN (
+    SELECT `o0`.`Id`, `o0`.`EmployeeId`, `o0`.`OrderId`, `o0`.`PriceAtSale`, `o0`.`Quantity`, `o0`.`ServiceId`, `s`.`Id` AS `Id0`, `s`.`CategoryId`, `s`.`Description`, `s`.`Name`, `s`.`Price`
+    FROM `OrderServices` AS `o0`
+    INNER JOIN `Services` AS `s` ON `o0`.`ServiceId` = `s`.`Id`
+) AS `s0` ON `o`.`Id` = `s0`.`OrderId`
+LEFT JOIN (
+    SELECT `o1`.`Id`, `o1`.`DetailId`, `o1`.`OrderId`, `o1`.`PriceAtSale`, `o1`.`Quantity`, `d`.`Id` AS `Id0`, `d`.`CategoryId`, `d`.`Description`, `d`.`Name`, `d`.`Price`
+    FROM `OrderDetails` AS `o1`
+    INNER JOIN `Details` AS `d` ON `o1`.`DetailId` = `d`.`Id`
+) AS `s1` ON `o`.`Id` = `s1`.`OrderId`
+ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0`, `s1`.`Id`
+2026-06-01 11:21:49.693 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Order.Order, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Order.OrderDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:21:49.749 +03:00 [INF] Executed action AutoService.Controllers.OrderController.GetOrdersAsync (AutoService) in 1331.9399ms
+2026-06-01 11:21:49.749 +03:00 [INF] Executed endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.756 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/order/getOrders - 200 null application/json; charset=utf-8 1432.1089ms
+2026-06-01 11:21:49.757 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/order/getOrders - application/json null
+2026-06-01 11:21:49.758 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:49.760 +03:00 [INF] Executing endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.761 +03:00 [INF] Route matched with {action = "GetOrders", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetOrdersAsync() on controller AutoService.Controllers.OrderController (AutoService).
+2026-06-01 11:21:49.807 +03:00 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `o`.`Id`, `o`.`ClientId`, `o`.`Comment`, `o`.`CreatedAt`, `o`.`Status`, `o`.`TotalAmount`, `o`.`VehicleId`, `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v0`.`Id`, `v0`.`Model`, `v0`.`OwnerId`, `v0`.`RegistrationNumber`, `v0`.`VinNumber`, `v0`.`Year`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`, `s0`.`Id`, `s0`.`EmployeeId`, `s0`.`OrderId`, `s0`.`PriceAtSale`, `s0`.`Quantity`, `s0`.`ServiceId`, `s0`.`Id0`, `s0`.`CategoryId`, `s0`.`Description`, `s0`.`Name`, `s0`.`Price`, `s1`.`Id`, `s1`.`DetailId`, `s1`.`OrderId`, `s1`.`PriceAtSale`, `s1`.`Quantity`, `s1`.`Id0`, `s1`.`CategoryId`, `s1`.`Description`, `s1`.`Name`, `s1`.`Price`
+FROM `Orders` AS `o`
+LEFT JOIN `Clients` AS `c` ON `o`.`ClientId` = `c`.`Id`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `o`.`VehicleId` = `v`.`Id`
+LEFT JOIN `Vehicles` AS `v0` ON `c`.`Id` = `v0`.`OwnerId`
+LEFT JOIN (
+    SELECT `o0`.`Id`, `o0`.`EmployeeId`, `o0`.`OrderId`, `o0`.`PriceAtSale`, `o0`.`Quantity`, `o0`.`ServiceId`, `s`.`Id` AS `Id0`, `s`.`CategoryId`, `s`.`Description`, `s`.`Name`, `s`.`Price`
+    FROM `OrderServices` AS `o0`
+    INNER JOIN `Services` AS `s` ON `o0`.`ServiceId` = `s`.`Id`
+) AS `s0` ON `o`.`Id` = `s0`.`OrderId`
+LEFT JOIN (
+    SELECT `o1`.`Id`, `o1`.`DetailId`, `o1`.`OrderId`, `o1`.`PriceAtSale`, `o1`.`Quantity`, `d`.`Id` AS `Id0`, `d`.`CategoryId`, `d`.`Description`, `d`.`Name`, `d`.`Price`
+    FROM `OrderDetails` AS `o1`
+    INNER JOIN `Details` AS `d` ON `o1`.`DetailId` = `d`.`Id`
+) AS `s1` ON `o`.`Id` = `s1`.`OrderId`
+ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0`, `s1`.`Id`
+2026-06-01 11:21:49.817 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Order.Order, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Order.OrderDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:21:49.818 +03:00 [INF] Executed action AutoService.Controllers.OrderController.GetOrdersAsync (AutoService) in 57.0052ms
+2026-06-01 11:21:49.818 +03:00 [INF] Executed endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.818 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/order/getOrders - 200 null application/json; charset=utf-8 61.3082ms
+2026-06-01 11:21:49.819 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/order/getOrders - application/json null
+2026-06-01 11:21:49.820 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:49.823 +03:00 [INF] Executing endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.823 +03:00 [INF] Route matched with {action = "GetOrders", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetOrdersAsync() on controller AutoService.Controllers.OrderController (AutoService).
+2026-06-01 11:21:49.886 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `o`.`Id`, `o`.`ClientId`, `o`.`Comment`, `o`.`CreatedAt`, `o`.`Status`, `o`.`TotalAmount`, `o`.`VehicleId`, `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v0`.`Id`, `v0`.`Model`, `v0`.`OwnerId`, `v0`.`RegistrationNumber`, `v0`.`VinNumber`, `v0`.`Year`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`, `s0`.`Id`, `s0`.`EmployeeId`, `s0`.`OrderId`, `s0`.`PriceAtSale`, `s0`.`Quantity`, `s0`.`ServiceId`, `s0`.`Id0`, `s0`.`CategoryId`, `s0`.`Description`, `s0`.`Name`, `s0`.`Price`, `s1`.`Id`, `s1`.`DetailId`, `s1`.`OrderId`, `s1`.`PriceAtSale`, `s1`.`Quantity`, `s1`.`Id0`, `s1`.`CategoryId`, `s1`.`Description`, `s1`.`Name`, `s1`.`Price`
+FROM `Orders` AS `o`
+LEFT JOIN `Clients` AS `c` ON `o`.`ClientId` = `c`.`Id`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `o`.`VehicleId` = `v`.`Id`
+LEFT JOIN `Vehicles` AS `v0` ON `c`.`Id` = `v0`.`OwnerId`
+LEFT JOIN (
+    SELECT `o0`.`Id`, `o0`.`EmployeeId`, `o0`.`OrderId`, `o0`.`PriceAtSale`, `o0`.`Quantity`, `o0`.`ServiceId`, `s`.`Id` AS `Id0`, `s`.`CategoryId`, `s`.`Description`, `s`.`Name`, `s`.`Price`
+    FROM `OrderServices` AS `o0`
+    INNER JOIN `Services` AS `s` ON `o0`.`ServiceId` = `s`.`Id`
+) AS `s0` ON `o`.`Id` = `s0`.`OrderId`
+LEFT JOIN (
+    SELECT `o1`.`Id`, `o1`.`DetailId`, `o1`.`OrderId`, `o1`.`PriceAtSale`, `o1`.`Quantity`, `d`.`Id` AS `Id0`, `d`.`CategoryId`, `d`.`Description`, `d`.`Name`, `d`.`Price`
+    FROM `OrderDetails` AS `o1`
+    INNER JOIN `Details` AS `d` ON `o1`.`DetailId` = `d`.`Id`
+) AS `s1` ON `o`.`Id` = `s1`.`OrderId`
+ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0`, `s1`.`Id`
+2026-06-01 11:21:49.896 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Order.Order, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Order.OrderDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:21:49.896 +03:00 [INF] Executed action AutoService.Controllers.OrderController.GetOrdersAsync (AutoService) in 73.2606ms
+2026-06-01 11:21:49.896 +03:00 [INF] Executed endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.897 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/order/getOrders - 200 null application/json; charset=utf-8 77.4265ms
+2026-06-01 11:21:49.898 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/order/getOrders - application/json null
+2026-06-01 11:21:49.898 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:49.899 +03:00 [INF] Executing endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.899 +03:00 [INF] Route matched with {action = "GetOrders", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetOrdersAsync() on controller AutoService.Controllers.OrderController (AutoService).
+2026-06-01 11:21:49.906 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `o`.`Id`, `o`.`ClientId`, `o`.`Comment`, `o`.`CreatedAt`, `o`.`Status`, `o`.`TotalAmount`, `o`.`VehicleId`, `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v0`.`Id`, `v0`.`Model`, `v0`.`OwnerId`, `v0`.`RegistrationNumber`, `v0`.`VinNumber`, `v0`.`Year`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`, `s0`.`Id`, `s0`.`EmployeeId`, `s0`.`OrderId`, `s0`.`PriceAtSale`, `s0`.`Quantity`, `s0`.`ServiceId`, `s0`.`Id0`, `s0`.`CategoryId`, `s0`.`Description`, `s0`.`Name`, `s0`.`Price`, `s1`.`Id`, `s1`.`DetailId`, `s1`.`OrderId`, `s1`.`PriceAtSale`, `s1`.`Quantity`, `s1`.`Id0`, `s1`.`CategoryId`, `s1`.`Description`, `s1`.`Name`, `s1`.`Price`
+FROM `Orders` AS `o`
+LEFT JOIN `Clients` AS `c` ON `o`.`ClientId` = `c`.`Id`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `o`.`VehicleId` = `v`.`Id`
+LEFT JOIN `Vehicles` AS `v0` ON `c`.`Id` = `v0`.`OwnerId`
+LEFT JOIN (
+    SELECT `o0`.`Id`, `o0`.`EmployeeId`, `o0`.`OrderId`, `o0`.`PriceAtSale`, `o0`.`Quantity`, `o0`.`ServiceId`, `s`.`Id` AS `Id0`, `s`.`CategoryId`, `s`.`Description`, `s`.`Name`, `s`.`Price`
+    FROM `OrderServices` AS `o0`
+    INNER JOIN `Services` AS `s` ON `o0`.`ServiceId` = `s`.`Id`
+) AS `s0` ON `o`.`Id` = `s0`.`OrderId`
+LEFT JOIN (
+    SELECT `o1`.`Id`, `o1`.`DetailId`, `o1`.`OrderId`, `o1`.`PriceAtSale`, `o1`.`Quantity`, `d`.`Id` AS `Id0`, `d`.`CategoryId`, `d`.`Description`, `d`.`Name`, `d`.`Price`
+    FROM `OrderDetails` AS `o1`
+    INNER JOIN `Details` AS `d` ON `o1`.`DetailId` = `d`.`Id`
+) AS `s1` ON `o`.`Id` = `s1`.`OrderId`
+ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0`, `s1`.`Id`
+2026-06-01 11:21:49.916 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Order.Order, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Order.OrderDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:21:49.916 +03:00 [INF] Executed action AutoService.Controllers.OrderController.GetOrdersAsync (AutoService) in 17.4879ms
+2026-06-01 11:21:49.917 +03:00 [INF] Executed endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.917 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/order/getOrders - 200 null application/json; charset=utf-8 19.045ms
+2026-06-01 11:21:49.918 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/order/getOrders - application/json null
+2026-06-01 11:21:49.918 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/order/getOrders - application/json null
+2026-06-01 11:21:49.918 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:49.918 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:49.919 +03:00 [INF] Executing endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.919 +03:00 [INF] Executing endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.919 +03:00 [INF] Route matched with {action = "GetOrders", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetOrdersAsync() on controller AutoService.Controllers.OrderController (AutoService).
+2026-06-01 11:21:49.919 +03:00 [INF] Route matched with {action = "GetOrders", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetOrdersAsync() on controller AutoService.Controllers.OrderController (AutoService).
+2026-06-01 11:21:49.925 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `o`.`Id`, `o`.`ClientId`, `o`.`Comment`, `o`.`CreatedAt`, `o`.`Status`, `o`.`TotalAmount`, `o`.`VehicleId`, `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v0`.`Id`, `v0`.`Model`, `v0`.`OwnerId`, `v0`.`RegistrationNumber`, `v0`.`VinNumber`, `v0`.`Year`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`, `s0`.`Id`, `s0`.`EmployeeId`, `s0`.`OrderId`, `s0`.`PriceAtSale`, `s0`.`Quantity`, `s0`.`ServiceId`, `s0`.`Id0`, `s0`.`CategoryId`, `s0`.`Description`, `s0`.`Name`, `s0`.`Price`, `s1`.`Id`, `s1`.`DetailId`, `s1`.`OrderId`, `s1`.`PriceAtSale`, `s1`.`Quantity`, `s1`.`Id0`, `s1`.`CategoryId`, `s1`.`Description`, `s1`.`Name`, `s1`.`Price`
+FROM `Orders` AS `o`
+LEFT JOIN `Clients` AS `c` ON `o`.`ClientId` = `c`.`Id`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `o`.`VehicleId` = `v`.`Id`
+LEFT JOIN `Vehicles` AS `v0` ON `c`.`Id` = `v0`.`OwnerId`
+LEFT JOIN (
+    SELECT `o0`.`Id`, `o0`.`EmployeeId`, `o0`.`OrderId`, `o0`.`PriceAtSale`, `o0`.`Quantity`, `o0`.`ServiceId`, `s`.`Id` AS `Id0`, `s`.`CategoryId`, `s`.`Description`, `s`.`Name`, `s`.`Price`
+    FROM `OrderServices` AS `o0`
+    INNER JOIN `Services` AS `s` ON `o0`.`ServiceId` = `s`.`Id`
+) AS `s0` ON `o`.`Id` = `s0`.`OrderId`
+LEFT JOIN (
+    SELECT `o1`.`Id`, `o1`.`DetailId`, `o1`.`OrderId`, `o1`.`PriceAtSale`, `o1`.`Quantity`, `d`.`Id` AS `Id0`, `d`.`CategoryId`, `d`.`Description`, `d`.`Name`, `d`.`Price`
+    FROM `OrderDetails` AS `o1`
+    INNER JOIN `Details` AS `d` ON `o1`.`DetailId` = `d`.`Id`
+) AS `s1` ON `o`.`Id` = `s1`.`OrderId`
+ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0`, `s1`.`Id`
+2026-06-01 11:21:49.930 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `o`.`Id`, `o`.`ClientId`, `o`.`Comment`, `o`.`CreatedAt`, `o`.`Status`, `o`.`TotalAmount`, `o`.`VehicleId`, `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v0`.`Id`, `v0`.`Model`, `v0`.`OwnerId`, `v0`.`RegistrationNumber`, `v0`.`VinNumber`, `v0`.`Year`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`, `s0`.`Id`, `s0`.`EmployeeId`, `s0`.`OrderId`, `s0`.`PriceAtSale`, `s0`.`Quantity`, `s0`.`ServiceId`, `s0`.`Id0`, `s0`.`CategoryId`, `s0`.`Description`, `s0`.`Name`, `s0`.`Price`, `s1`.`Id`, `s1`.`DetailId`, `s1`.`OrderId`, `s1`.`PriceAtSale`, `s1`.`Quantity`, `s1`.`Id0`, `s1`.`CategoryId`, `s1`.`Description`, `s1`.`Name`, `s1`.`Price`
+FROM `Orders` AS `o`
+LEFT JOIN `Clients` AS `c` ON `o`.`ClientId` = `c`.`Id`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `o`.`VehicleId` = `v`.`Id`
+LEFT JOIN `Vehicles` AS `v0` ON `c`.`Id` = `v0`.`OwnerId`
+LEFT JOIN (
+    SELECT `o0`.`Id`, `o0`.`EmployeeId`, `o0`.`OrderId`, `o0`.`PriceAtSale`, `o0`.`Quantity`, `o0`.`ServiceId`, `s`.`Id` AS `Id0`, `s`.`CategoryId`, `s`.`Description`, `s`.`Name`, `s`.`Price`
+    FROM `OrderServices` AS `o0`
+    INNER JOIN `Services` AS `s` ON `o0`.`ServiceId` = `s`.`Id`
+) AS `s0` ON `o`.`Id` = `s0`.`OrderId`
+LEFT JOIN (
+    SELECT `o1`.`Id`, `o1`.`DetailId`, `o1`.`OrderId`, `o1`.`PriceAtSale`, `o1`.`Quantity`, `d`.`Id` AS `Id0`, `d`.`CategoryId`, `d`.`Description`, `d`.`Name`, `d`.`Price`
+    FROM `OrderDetails` AS `o1`
+    INNER JOIN `Details` AS `d` ON `o1`.`DetailId` = `d`.`Id`
+) AS `s1` ON `o`.`Id` = `s1`.`OrderId`
+ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0`, `s1`.`Id`
+2026-06-01 11:21:49.935 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Order.Order, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Order.OrderDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:21:49.935 +03:00 [INF] Executed action AutoService.Controllers.OrderController.GetOrdersAsync (AutoService) in 16.0781ms
+2026-06-01 11:21:49.936 +03:00 [INF] Executed endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.936 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/order/getOrders - 200 null application/json; charset=utf-8 17.9835ms
+2026-06-01 11:21:49.939 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Order.Order, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Order.OrderDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:21:49.940 +03:00 [INF] Executed action AutoService.Controllers.OrderController.GetOrdersAsync (AutoService) in 20.7537ms
+2026-06-01 11:21:49.940 +03:00 [INF] Executed endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:49.940 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/order/getOrders - 200 null application/json; charset=utf-8 22.3044ms
+2026-06-01 11:21:50.565 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/order/getOrders - application/json null
+2026-06-01 11:21:50.566 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:50.567 +03:00 [INF] Executing endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:50.567 +03:00 [INF] Route matched with {action = "GetOrders", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetOrdersAsync() on controller AutoService.Controllers.OrderController (AutoService).
+2026-06-01 11:21:50.578 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `o`.`Id`, `o`.`ClientId`, `o`.`Comment`, `o`.`CreatedAt`, `o`.`Status`, `o`.`TotalAmount`, `o`.`VehicleId`, `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v0`.`Id`, `v0`.`Model`, `v0`.`OwnerId`, `v0`.`RegistrationNumber`, `v0`.`VinNumber`, `v0`.`Year`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`, `s0`.`Id`, `s0`.`EmployeeId`, `s0`.`OrderId`, `s0`.`PriceAtSale`, `s0`.`Quantity`, `s0`.`ServiceId`, `s0`.`Id0`, `s0`.`CategoryId`, `s0`.`Description`, `s0`.`Name`, `s0`.`Price`, `s1`.`Id`, `s1`.`DetailId`, `s1`.`OrderId`, `s1`.`PriceAtSale`, `s1`.`Quantity`, `s1`.`Id0`, `s1`.`CategoryId`, `s1`.`Description`, `s1`.`Name`, `s1`.`Price`
+FROM `Orders` AS `o`
+LEFT JOIN `Clients` AS `c` ON `o`.`ClientId` = `c`.`Id`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `o`.`VehicleId` = `v`.`Id`
+LEFT JOIN `Vehicles` AS `v0` ON `c`.`Id` = `v0`.`OwnerId`
+LEFT JOIN (
+    SELECT `o0`.`Id`, `o0`.`EmployeeId`, `o0`.`OrderId`, `o0`.`PriceAtSale`, `o0`.`Quantity`, `o0`.`ServiceId`, `s`.`Id` AS `Id0`, `s`.`CategoryId`, `s`.`Description`, `s`.`Name`, `s`.`Price`
+    FROM `OrderServices` AS `o0`
+    INNER JOIN `Services` AS `s` ON `o0`.`ServiceId` = `s`.`Id`
+) AS `s0` ON `o`.`Id` = `s0`.`OrderId`
+LEFT JOIN (
+    SELECT `o1`.`Id`, `o1`.`DetailId`, `o1`.`OrderId`, `o1`.`PriceAtSale`, `o1`.`Quantity`, `d`.`Id` AS `Id0`, `d`.`CategoryId`, `d`.`Description`, `d`.`Name`, `d`.`Price`
+    FROM `OrderDetails` AS `o1`
+    INNER JOIN `Details` AS `d` ON `o1`.`DetailId` = `d`.`Id`
+) AS `s1` ON `o`.`Id` = `s1`.`OrderId`
+ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0`, `s1`.`Id`
+2026-06-01 11:21:50.591 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Order.Order, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Order.OrderDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:21:50.592 +03:00 [INF] Executed action AutoService.Controllers.OrderController.GetOrdersAsync (AutoService) in 24.2309ms
+2026-06-01 11:21:50.592 +03:00 [INF] Executed endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:50.592 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/order/getOrders - 200 null application/json; charset=utf-8 26.8208ms
+2026-06-01 11:21:50.593 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/order/getOrders - application/json null
+2026-06-01 11:21:50.593 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:50.594 +03:00 [INF] Executing endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:50.594 +03:00 [INF] Route matched with {action = "GetOrders", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetOrdersAsync() on controller AutoService.Controllers.OrderController (AutoService).
+2026-06-01 11:21:50.601 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `o`.`Id`, `o`.`ClientId`, `o`.`Comment`, `o`.`CreatedAt`, `o`.`Status`, `o`.`TotalAmount`, `o`.`VehicleId`, `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v0`.`Id`, `v0`.`Model`, `v0`.`OwnerId`, `v0`.`RegistrationNumber`, `v0`.`VinNumber`, `v0`.`Year`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`, `s0`.`Id`, `s0`.`EmployeeId`, `s0`.`OrderId`, `s0`.`PriceAtSale`, `s0`.`Quantity`, `s0`.`ServiceId`, `s0`.`Id0`, `s0`.`CategoryId`, `s0`.`Description`, `s0`.`Name`, `s0`.`Price`, `s1`.`Id`, `s1`.`DetailId`, `s1`.`OrderId`, `s1`.`PriceAtSale`, `s1`.`Quantity`, `s1`.`Id0`, `s1`.`CategoryId`, `s1`.`Description`, `s1`.`Name`, `s1`.`Price`
+FROM `Orders` AS `o`
+LEFT JOIN `Clients` AS `c` ON `o`.`ClientId` = `c`.`Id`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `o`.`VehicleId` = `v`.`Id`
+LEFT JOIN `Vehicles` AS `v0` ON `c`.`Id` = `v0`.`OwnerId`
+LEFT JOIN (
+    SELECT `o0`.`Id`, `o0`.`EmployeeId`, `o0`.`OrderId`, `o0`.`PriceAtSale`, `o0`.`Quantity`, `o0`.`ServiceId`, `s`.`Id` AS `Id0`, `s`.`CategoryId`, `s`.`Description`, `s`.`Name`, `s`.`Price`
+    FROM `OrderServices` AS `o0`
+    INNER JOIN `Services` AS `s` ON `o0`.`ServiceId` = `s`.`Id`
+) AS `s0` ON `o`.`Id` = `s0`.`OrderId`
+LEFT JOIN (
+    SELECT `o1`.`Id`, `o1`.`DetailId`, `o1`.`OrderId`, `o1`.`PriceAtSale`, `o1`.`Quantity`, `d`.`Id` AS `Id0`, `d`.`CategoryId`, `d`.`Description`, `d`.`Name`, `d`.`Price`
+    FROM `OrderDetails` AS `o1`
+    INNER JOIN `Details` AS `d` ON `o1`.`DetailId` = `d`.`Id`
+) AS `s1` ON `o`.`Id` = `s1`.`OrderId`
+ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0`, `s1`.`Id`
+2026-06-01 11:21:50.613 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Order.Order, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Order.OrderDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:21:50.614 +03:00 [INF] Executed action AutoService.Controllers.OrderController.GetOrdersAsync (AutoService) in 20.0292ms
+2026-06-01 11:21:50.614 +03:00 [INF] Executed endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:50.615 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/order/getOrders - 200 null application/json; charset=utf-8 21.8342ms
+2026-06-01 11:21:51.341 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/order/getOrders - application/json null
+2026-06-01 11:21:51.341 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:51.342 +03:00 [INF] Executing endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:51.342 +03:00 [INF] Route matched with {action = "GetOrders", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetOrdersAsync() on controller AutoService.Controllers.OrderController (AutoService).
+2026-06-01 11:21:51.351 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `o`.`Id`, `o`.`ClientId`, `o`.`Comment`, `o`.`CreatedAt`, `o`.`Status`, `o`.`TotalAmount`, `o`.`VehicleId`, `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v0`.`Id`, `v0`.`Model`, `v0`.`OwnerId`, `v0`.`RegistrationNumber`, `v0`.`VinNumber`, `v0`.`Year`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`, `s0`.`Id`, `s0`.`EmployeeId`, `s0`.`OrderId`, `s0`.`PriceAtSale`, `s0`.`Quantity`, `s0`.`ServiceId`, `s0`.`Id0`, `s0`.`CategoryId`, `s0`.`Description`, `s0`.`Name`, `s0`.`Price`, `s1`.`Id`, `s1`.`DetailId`, `s1`.`OrderId`, `s1`.`PriceAtSale`, `s1`.`Quantity`, `s1`.`Id0`, `s1`.`CategoryId`, `s1`.`Description`, `s1`.`Name`, `s1`.`Price`
+FROM `Orders` AS `o`
+LEFT JOIN `Clients` AS `c` ON `o`.`ClientId` = `c`.`Id`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `o`.`VehicleId` = `v`.`Id`
+LEFT JOIN `Vehicles` AS `v0` ON `c`.`Id` = `v0`.`OwnerId`
+LEFT JOIN (
+    SELECT `o0`.`Id`, `o0`.`EmployeeId`, `o0`.`OrderId`, `o0`.`PriceAtSale`, `o0`.`Quantity`, `o0`.`ServiceId`, `s`.`Id` AS `Id0`, `s`.`CategoryId`, `s`.`Description`, `s`.`Name`, `s`.`Price`
+    FROM `OrderServices` AS `o0`
+    INNER JOIN `Services` AS `s` ON `o0`.`ServiceId` = `s`.`Id`
+) AS `s0` ON `o`.`Id` = `s0`.`OrderId`
+LEFT JOIN (
+    SELECT `o1`.`Id`, `o1`.`DetailId`, `o1`.`OrderId`, `o1`.`PriceAtSale`, `o1`.`Quantity`, `d`.`Id` AS `Id0`, `d`.`CategoryId`, `d`.`Description`, `d`.`Name`, `d`.`Price`
+    FROM `OrderDetails` AS `o1`
+    INNER JOIN `Details` AS `d` ON `o1`.`DetailId` = `d`.`Id`
+) AS `s1` ON `o`.`Id` = `s1`.`OrderId`
+ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0`, `s1`.`Id`
+2026-06-01 11:21:51.366 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Order.Order, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Order.OrderDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:21:51.366 +03:00 [INF] Executed action AutoService.Controllers.OrderController.GetOrdersAsync (AutoService) in 23.98ms
+2026-06-01 11:21:51.367 +03:00 [INF] Executed endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:51.367 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/order/getOrders - 200 null application/json; charset=utf-8 26.1733ms
+2026-06-01 11:21:51.368 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/order/getOrders - application/json null
+2026-06-01 11:21:51.368 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:21:51.368 +03:00 [INF] Executing endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:51.368 +03:00 [INF] Route matched with {action = "GetOrders", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetOrdersAsync() on controller AutoService.Controllers.OrderController (AutoService).
+2026-06-01 11:21:51.381 +03:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `o`.`Id`, `o`.`ClientId`, `o`.`Comment`, `o`.`CreatedAt`, `o`.`Status`, `o`.`TotalAmount`, `o`.`VehicleId`, `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v0`.`Id`, `v0`.`Model`, `v0`.`OwnerId`, `v0`.`RegistrationNumber`, `v0`.`VinNumber`, `v0`.`Year`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`, `s0`.`Id`, `s0`.`EmployeeId`, `s0`.`OrderId`, `s0`.`PriceAtSale`, `s0`.`Quantity`, `s0`.`ServiceId`, `s0`.`Id0`, `s0`.`CategoryId`, `s0`.`Description`, `s0`.`Name`, `s0`.`Price`, `s1`.`Id`, `s1`.`DetailId`, `s1`.`OrderId`, `s1`.`PriceAtSale`, `s1`.`Quantity`, `s1`.`Id0`, `s1`.`CategoryId`, `s1`.`Description`, `s1`.`Name`, `s1`.`Price`
+FROM `Orders` AS `o`
+LEFT JOIN `Clients` AS `c` ON `o`.`ClientId` = `c`.`Id`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `o`.`VehicleId` = `v`.`Id`
+LEFT JOIN `Vehicles` AS `v0` ON `c`.`Id` = `v0`.`OwnerId`
+LEFT JOIN (
+    SELECT `o0`.`Id`, `o0`.`EmployeeId`, `o0`.`OrderId`, `o0`.`PriceAtSale`, `o0`.`Quantity`, `o0`.`ServiceId`, `s`.`Id` AS `Id0`, `s`.`CategoryId`, `s`.`Description`, `s`.`Name`, `s`.`Price`
+    FROM `OrderServices` AS `o0`
+    INNER JOIN `Services` AS `s` ON `o0`.`ServiceId` = `s`.`Id`
+) AS `s0` ON `o`.`Id` = `s0`.`OrderId`
+LEFT JOIN (
+    SELECT `o1`.`Id`, `o1`.`DetailId`, `o1`.`OrderId`, `o1`.`PriceAtSale`, `o1`.`Quantity`, `d`.`Id` AS `Id0`, `d`.`CategoryId`, `d`.`Description`, `d`.`Name`, `d`.`Price`
+    FROM `OrderDetails` AS `o1`
+    INNER JOIN `Details` AS `d` ON `o1`.`DetailId` = `d`.`Id`
+) AS `s1` ON `o`.`Id` = `s1`.`OrderId`
+ORDER BY `o`.`Id`, `c`.`Id`, `u`.`Id`, `v`.`Id`, `v0`.`Id`, `s0`.`Id`, `s0`.`Id0`, `s1`.`Id`
+2026-06-01 11:21:51.395 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Order.Order, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Order.OrderDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:21:51.396 +03:00 [INF] Executed action AutoService.Controllers.OrderController.GetOrdersAsync (AutoService) in 27.1165ms
+2026-06-01 11:21:51.396 +03:00 [INF] Executed endpoint 'AutoService.Controllers.OrderController.GetOrdersAsync (AutoService)'
+2026-06-01 11:21:51.396 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/order/getOrders - 200 null application/json; charset=utf-8 28.4541ms
+2026-06-01 11:26:07.478 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5130/api/client/getClients - null null
+2026-06-01 11:26:07.478 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:26:07.479 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5130/api/client/getClients - 204 null null 0.8048ms
+2026-06-01 11:26:07.479 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/client/getClients - application/json null
+2026-06-01 11:26:07.480 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:26:07.481 +03:00 [INF] Executing endpoint 'AutoService.Controllers.ClientController.GetClients (AutoService)'
+2026-06-01 11:26:07.494 +03:00 [INF] Route matched with {action = "GetClients", controller = "Client"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetClients() on controller AutoService.Controllers.ClientController (AutoService).
+2026-06-01 11:26:07.523 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`
+FROM `Clients` AS `c`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `c`.`Id` = `v`.`OwnerId`
+ORDER BY `c`.`Id`, `u`.`Id`
+2026-06-01 11:26:07.526 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Users.Client, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Auth.ClientDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:26:07.530 +03:00 [INF] Executed action AutoService.Controllers.ClientController.GetClients (AutoService) in 35.4262ms
+2026-06-01 11:26:07.530 +03:00 [INF] Executed endpoint 'AutoService.Controllers.ClientController.GetClients (AutoService)'
+2026-06-01 11:26:07.530 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/client/getClients - 200 null application/json; charset=utf-8 51.0327ms
+2026-06-01 11:26:07.531 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5130/api/client/getClients - application/json null
+2026-06-01 11:26:07.531 +03:00 [INF] CORS policy execution successful.
+2026-06-01 11:26:07.532 +03:00 [INF] Executing endpoint 'AutoService.Controllers.ClientController.GetClients (AutoService)'
+2026-06-01 11:26:07.532 +03:00 [INF] Route matched with {action = "GetClients", controller = "Client"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetClients() on controller AutoService.Controllers.ClientController (AutoService).
+2026-06-01 11:26:07.538 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`Id`, `c`.`Address`, `c`.`PhoneNumber`, `c`.`UserId`, `u`.`Id`, `u`.`Email`, `u`.`FullName`, `u`.`PasswordHash`, `u`.`Role`, `v`.`Id`, `v`.`Model`, `v`.`OwnerId`, `v`.`RegistrationNumber`, `v`.`VinNumber`, `v`.`Year`
+FROM `Clients` AS `c`
+LEFT JOIN `Users` AS `u` ON `c`.`UserId` = `u`.`Id`
+LEFT JOIN `Vehicles` AS `v` ON `c`.`Id` = `v`.`OwnerId`
+ORDER BY `c`.`Id`, `u`.`Id`
+2026-06-01 11:26:07.539 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+ListSelectIterator`2[[AutoService.Models.Users.Client, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[AutoService.DTOs.Auth.ClientDto, AutoService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-01 11:26:07.539 +03:00 [INF] Executed action AutoService.Controllers.ClientController.GetClients (AutoService) in 7.0004ms
+2026-06-01 11:26:07.539 +03:00 [INF] Executed endpoint 'AutoService.Controllers.ClientController.GetClients (AutoService)'
+2026-06-01 11:26:07.539 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5130/api/client/getClients - 200 null application/json; charset=utf-8 8.2441ms

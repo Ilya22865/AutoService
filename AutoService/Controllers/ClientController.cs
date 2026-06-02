@@ -24,7 +24,6 @@ namespace AutoService.Controllers
         {
             try
             {
-
                 var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
                 var userId = int.Parse(userClaim!.Value);
                 var role = User.FindFirst(ClaimTypes.Role)?.Value;

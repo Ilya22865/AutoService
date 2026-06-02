@@ -111,13 +111,13 @@ export interface OrderDetailsDto {
     detailDescription?: string
 }
 
+export const clientApi = {
+    getProfile: () => request<{ fullName: string; email: string; phoneNumber: string | null; address: string | null }>('/client/profile'),
+}
+
 export const catalogApi = {
     getServices: () => request<{ id: number; name: string; description: string; price: number; category: string | null }[]>('/catalog/services'),
     getDetails: () => request<{ id: number; name: string; description: string; price: number; category: string | null }[]>('/catalog/details'),
-}
-
-export const clientApi = {
-    getProfile: () => request<{ fullName: string; email: string; phoneNumber: string | null; address: string | null }>('/client/profile'),
 }
 
 export const orderApi = {
@@ -129,6 +129,12 @@ export const orderApi = {
 
 export const getOrdersApi = {
     getOrders: () => request<OrderDto[]>('/order/getOrders', {
+        method: 'GET',
+    }),
+}
+
+export const getClientsApi = {
+    getClients: () => request<ClientDto[]>('/client/getClients', {
         method: 'GET',
     }),
 }
