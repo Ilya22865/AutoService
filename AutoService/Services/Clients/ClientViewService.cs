@@ -4,7 +4,6 @@ using AutoService.DTOs.Order;
 using AutoService.Models.Order;
 using AutoService.Models.Users;
 using Microsoft.EntityFrameworkCore;
-using AutoService.DTOs.Other;
 namespace AutoService.Services.Clients
 {
     public class ClientViewService : IClientViewService
@@ -40,16 +39,6 @@ namespace AutoService.Services.Clients
                 .ToListAsync();
 
             return clients.Select(MapClient);
-        }
-
-        public async Task<ReviewDto> AddReviewAsync(ReviewDto reviewDto)
-        {
-            
-        }
-
-        public async Task<IEnumerable<ReviewDto>> GetReviewsAsync(int? vehicleId = null)
-        {
-            throw new NotImplementedException();
         }
     }
 }

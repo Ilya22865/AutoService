@@ -1,12 +1,10 @@
 using System.Security.Claims;
 using AutoService.DTOs.Order;
-using AutoService.Models.Catalog;
 using AutoService.Models.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoService.Data;
-using AutoService.DTOs.DetailsAndServicesDto;
 using AutoService.Services.OrderServices;
 
 namespace AutoService.Controllers

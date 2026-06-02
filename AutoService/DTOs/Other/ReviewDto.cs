@@ -4,10 +4,11 @@ namespace AutoService.DTOs.Other
 {
     public class ReviewDto
     {
+        public int ClientId { get; set; }
         public int Rating { get; set; }
         public string Comment { get; set; } = null!;
-        public string UserName { get; set; } = null!;
-        public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-        public VehicleDto? Vehicle { get; set; }
+        public string ClientName { get; set; } = null!;
+        public DateOnly Date { get; set; }
+        public string VehicleModel { get; set; } = null!;
     }
 }
