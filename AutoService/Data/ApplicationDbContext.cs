@@ -22,5 +22,6 @@ namespace AutoService.Data
         public DbSet<Service> Services { get; set; }
         public DbSet<DetailCategory> DetailCategories { get; set; }
         public DbSet<ServiceCategory> ServiceCategories { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }

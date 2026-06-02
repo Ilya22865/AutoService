@@ -73,7 +73,7 @@ export default function OrderForm() {
             <select className="order__select">
               <option value="">Выберите услугу</option>
               {services.map(s => (
-                <option key={s.id} value={s.id}>{s.name} — {s.price} Br</option>
+                <option key={s.id} value={s.id}>{s.name} -- {s.price} Br</option>
               ))}
             </select>
             <textarea className="order__textarea" placeholder="Опишите проблему" rows={3} />

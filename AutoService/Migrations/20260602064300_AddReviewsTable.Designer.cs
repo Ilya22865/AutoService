@@ -4,6 +4,7 @@ using AutoService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260602064300_AddReviewsTable")]
+    partial class AddReviewsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,16 +306,13 @@ namespace AutoService.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("AutoService.Models.Users.Review", b =>
+            modelBuilder.Entity("AutoService.Models.Users.Reviews", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
@@ -323,12 +323,15 @@ namespace AutoService.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("VehicleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("UserId");
 
                     b.HasIndex("VehicleId");
 
@@ -469,17 +472,17 @@ namespace AutoService.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AutoService.Models.Users.Review", b =>
+            modelBuilder.Entity("AutoService.Models.Users.Reviews", b =>
                 {
-                    b.HasOne("AutoService.Models.Users.Client", "Client")
+                    b.HasOne("AutoService.Models.Users.User", "User")
                         .WithMany()
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("UserId");
 
                     b.HasOne("AutoService.Models.Order.Vehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleId");
 
-                    b.Navigation("Client");
+                    b.Navigation("User");
 
                     b.Navigation("Vehicle");
                 });
