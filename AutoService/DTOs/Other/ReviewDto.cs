@@ -2,7 +2,7 @@ using AutoService.DTOs.Order;
 
 namespace AutoService.DTOs.Other
 {
-    public class ReviewsDto
+    public class ReviewDto
     {
         public int Rating { get; set; }
         public string Comment { get; set; } = null!;
