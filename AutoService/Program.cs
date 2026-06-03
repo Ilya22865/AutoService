@@ -26,6 +26,7 @@ builder.Services.AddScoped<IEmailValidator, EmailValidatorService>();
 builder.Services.AddScoped<ITokenGenerator, TokenGeneratorService>();
 builder.Services.AddScoped<IOrderViewService, OrderViewService>();
 builder.Services.AddScoped<IClientViewService, ClientViewService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var KEY = jwtSettings["Key"];

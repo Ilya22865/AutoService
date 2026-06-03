@@ -39,7 +39,12 @@ namespace AutoService.Services.Clients
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 
-            return MapReview(review);
+            var created = await _context.Reviews
+                .Include(r => r.Client).ThenInclude(c => c.User)
+                .Include(r => r.Vehicle)
+                .FirstAsync(r => r.Id == review.Id);
+
+            return MapReview(created);
         }
 
         public async Task<IEnumerable<ReviewDto>> GetReviewsAsync(int? vehicleId = null)

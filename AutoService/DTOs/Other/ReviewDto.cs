@@ -7,7 +7,7 @@ namespace AutoService.DTOs.Other
         public int ClientId { get; set; }
         public int Rating { get; set; }
         public string Comment { get; set; } = null!;
-        public string ClientName { get; set; } = null!;
+        public string? ClientName { get; set; }
         public DateOnly Date { get; set; }
         public string VehicleModel { get; set; } = null!;
     }
