@@ -7,8 +7,8 @@ const navLinks = [
     { href: "/#services", label: "Услуги" },
     { href: "/#catalog", label: "Запчасти" },
     { href: "/#about", label: "О нас" },
-    { href: "/reviews", label: "Отзывы" },
     { href: "/#contacts", label: "Контакты" },
+    { href: "/reviews", label: "Отзывы" },
 ];
 
 function getUser(): { name: string; role: string } | null {

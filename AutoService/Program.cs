@@ -1,21 +1,17 @@
 using System.Text;
 using AutoService.Data;
+using AutoService.Logging;
 using AutoService.Services.Auth;
 using AutoService.Services.Clients;
 using AutoService.Services.OrderServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Serilog;
-
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.File("logs/autoservice-.log", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddFile("logs");
 builder.Configuration.AddUserSecrets<Program>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -70,7 +66,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 var app = builder.Build();
 
-Directory.CreateDirectory("logs");
 app.UseRouting();
 app.UseCors("AllowFrontend");
 app.UseAuthentication();

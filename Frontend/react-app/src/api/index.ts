@@ -111,10 +111,20 @@ export interface OrderDetailsDto {
     detailDescription?: string
 }
 
-export const clientApi = {
-    getProfile: () => request<{ fullName: string; email: string; phoneNumber: string | null; address: string | null }>('/client/profile'),
+interface ReviewRequest {
+    rating: number
+    vehicleModel: string
+    comment: string
 }
 
+export interface ReviewDto {
+    clientId: number
+    rating: number
+    comment: string
+    clientName: string
+    date: string
+    vehicleModel: string
+}
 export const catalogApi = {
     getServices: () => request<{ id: number; name: string; description: string; price: number; category: string | null }[]>('/catalog/services'),
     getDetails: () => request<{ id: number; name: string; description: string; price: number; category: string | null }[]>('/catalog/details'),
@@ -143,7 +153,15 @@ export const logApi = {
         headers: { 'Authorization': `Bearer ${getToken()}` },
     }),
 }
-
+export const reviewApi = {
+    addReview: (data: ReviewRequest) => request<ReviewDto>('/review/addReview', {
+        method: 'POST',
+        body: JSON.stringify(data)
+    }),
+    getReviews: () => request<ReviewDto[]>('/review/getReviews', {
+        method: 'GET'
+    })
+}
 export const authApi = {
     register: (data: {
         fullName: string,

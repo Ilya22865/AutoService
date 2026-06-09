@@ -15,7 +15,7 @@ public class LogController : ControllerBase
         if (!Directory.Exists(dir))
             return NotFound("Логи отсутствуют.");
 
-        var files = Directory.GetFiles(dir).OrderByDescending(f => f).ToList();
+        var files = Directory.GetFiles(dir, "autoservice-????-??-??.log").OrderByDescending(f => f).ToList();
         if (files.Count == 0)
             return NotFound("Логи отсутствуют.");
 

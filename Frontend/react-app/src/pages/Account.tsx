@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getOrdersApi, clientApi, type OrderDto } from '../api';
+import { getOrdersApi, type OrderDto } from '../api';
 
 const statusMap: Record<string, { label: string; color: string }> = {
   'Pending': { label: 'Ожидает', color: 'yellow' },
@@ -23,14 +23,12 @@ function getUserName(): string {
 
 export default function Account() {
   const [orders, setOrders] = useState<OrderDto[]>([]);
-  const [profile, setProfile] = useState<{ fullName: string; email: string; phoneNumber: string | null; address: string | null } | null>(null);
 
   useEffect(() => {
     getOrdersApi.getOrders().then(setOrders).catch(console.error);
-    clientApi.getProfile().then(setProfile).catch(() => {});
   }, []);
 
-  const name = profile?.fullName ?? getUserName();
+  const name = getUserName();
   const completed = orders.filter(o => o.status === 'Completed').length;
   const inProgress = orders.filter(o => o.status === 'Pending').length;
 
@@ -118,14 +116,7 @@ export default function Account() {
           <div className="acc-info">
             <div className="acc-info__avatar">{name.charAt(0)}</div>
             <div className="acc-info__body">
-              <div className="acc-info__name">{profile?.fullName ?? name}</div>
-              {profile && (
-                <>
-                  <div className="acc-info__detail">{profile.email}</div>
-                  <div className="acc-info__detail">{profile.phoneNumber ?? '—'}</div>
-                  <div className="acc-info__detail">{profile.address ?? '—'}</div>
-                </>
-              )}
+              <div className="acc-info__name">{name}</div>
             </div>
           </div>
         </div>

@@ -186,11 +186,11 @@ export default function OrderPage() {
             <div className="order-page__section">
               <h2>Информация о клиенте</h2>
               <div className="order-page__form-row">
-                <input type="text" className="order-page__input" placeholder="Ваше имя" value={name} onChange={e => setName(e.target.value)} />
+                <input type="text" className="order-page__input" placeholder="Ваше имя" value={name} readOnly />
                 <input type="tel" className="order-page__input" placeholder="Телефон" value={phone} onChange={e => setPhone(e.target.value)} />
               </div>
               <div className="order-page__form-row">
-                <input type="email" className="order-page__input" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+                <input type="email" className="order-page__input" placeholder="Email" value={email}  readOnly />
                 <input type="text" className="order-page__input" placeholder="Адрес" value={address} onChange={e => setAddress(e.target.value)} />
               </div>
             </div>
