@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "w6lYR5/SMeM=",
+  "dgSpecHash": "f2nJ4dMv7Xk=",
   "success": true,
   "projectFilePath": "/home/user/AutoService/AutoService/AutoService.csproj",
   "expectedPackageFiles": [
@@ -33,6 +33,7 @@
     "/home/user/.nuget/packages/mono.texttemplating/3.0.0/mono.texttemplating.3.0.0.nupkg.sha512",
     "/home/user/.nuget/packages/mysqlconnector/2.4.0/mysqlconnector.2.4.0.nupkg.sha512",
     "/home/user/.nuget/packages/pomelo.entityframeworkcore.mysql/9.0.0/pomelo.entityframeworkcore.mysql.9.0.0.nupkg.sha512",
+    "/home/user/.nuget/packages/resend/0.5.1/resend.0.5.1.nupkg.sha512",
     "/home/user/.nuget/packages/system.codedom/6.0.0/system.codedom.6.0.0.nupkg.sha512",
     "/home/user/.nuget/packages/system.composition/7.0.0/system.composition.7.0.0.nupkg.sha512",
     "/home/user/.nuget/packages/system.composition.attributedmodel/7.0.0/system.composition.attributedmodel.7.0.0.nupkg.sha512",

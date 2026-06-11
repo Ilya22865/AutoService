@@ -13,7 +13,8 @@
           "Microsoft.AspNetCore.OpenApi": "10.0.4",
           "Microsoft.EntityFrameworkCore": "9.0.0",
           "Microsoft.EntityFrameworkCore.Design": "9.0.0",
-          "Pomelo.EntityFrameworkCore.MySql": "9.0.0"
+          "Pomelo.EntityFrameworkCore.MySql": "9.0.0",
+          "Resend": "0.5.1"
         },
         "runtime": {
           "AutoService.dll": {}
@@ -500,6 +501,14 @@
           }
         }
       },
+      "Resend/0.5.1": {
+        "runtime": {
+          "lib/net8.0/Resend.dll": {
+            "assemblyVersion": "0.5.1.0",
+            "fileVersion": "0.5.1.0"
+          }
+        }
+      },
       "System.CodeDom/6.0.0": {
         "runtime": {
           "lib/net6.0/System.CodeDom.dll": {
@@ -769,6 +778,13 @@
       "sha512": "sha512-cl7S4s6CbJno0LjNxrBHNc2xxmCliR5i40ATPZk/eTywVaAbHCbdc9vbGc3QThvwGjHqrDHT8vY9m1VF/47o0g==",
       "path": "pomelo.entityframeworkcore.mysql/9.0.0",
       "hashPath": "pomelo.entityframeworkcore.mysql.9.0.0.nupkg.sha512"
+    },
+    "Resend/0.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-omjgTjmosGHJ+bF9Mnk6Gu4TqCwIE/XyeYvQCfkPlDmoUE5yuNwxUP5Cyt9Og2KTqTzKqfQypFzlgCgORCEOSw==",
+      "path": "resend/0.5.1",
+      "hashPath": "resend.0.5.1.nupkg.sha512"
     },
     "System.CodeDom/6.0.0": {
       "type": "package",

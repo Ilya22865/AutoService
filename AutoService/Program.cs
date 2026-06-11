@@ -7,6 +7,7 @@ using AutoService.Services.OrderServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Resend;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
@@ -17,6 +18,11 @@ builder.Configuration.AddUserSecrets<Program>();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+builder.Services.AddResend(options =>
+{
+    options.ApiToken = builder.Configuration["Resend:ApiKeys:Default"] ?? "";
+});
 
 builder.Services.AddScoped<IEmailValidator, EmailValidatorService>();
 builder.Services.AddScoped<ITokenGenerator, TokenGeneratorService>();
