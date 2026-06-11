@@ -9,6 +9,9 @@ namespace AutoService.Models.Users
         public UserRole Role { get; set; }
         public Client? Client { get; set; }
         public Employee? Employee { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public string? EmailVerificationToken { get; set; }
+        public DateTime? VerificationTokenExpires { get; set; }
     }
 
     public enum UserRole
