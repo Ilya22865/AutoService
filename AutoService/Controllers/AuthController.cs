@@ -109,8 +109,15 @@ namespace AutoService.Controllers
                         await _emailValidatorService.SendValidationEmailAsync(
                             employeeUs.Email,
                             "Подтверждение Email",
-                            $@"<b>Перейдите по ссылке для подтвержения email</b>
-                              <a href='http://localhost:5173/verify-email?token={employeeUs.EmailVerificationToken}'>Подтвердить</a>");
+                            $@"<div style='font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;'>
+                                <h2 style='color: #d4332a; margin-bottom: 20px;'>AutoService</h2>
+                                <p style='color: #333; font-size: 15px; line-height: 1.6;'>Здравствуйте!<br><br>
+                                Спасибо за регистрацию. Для завершения нажмите на кнопку ниже:</p>
+                                <a href='http://localhost:5173/verify-email?token={employeeUs.EmailVerificationToken}'
+                                style='display: inline-block; background: #d4332a; color: #fff; text-decoration: none;
+                                padding: 12px 30px; border-radius: 6px; font-size: 15px; margin: 20px 0;'>Подтвердить Email</a>
+                                <p style='color: #888; font-size: 13px;'>Ссылка действительна 5 минут.<br>Если вы не регистрировались, проигнорируйте это письмо.</p>
+                              </div>");
                         return Ok(new { message = "Проверьте почту для подтверждения" });
                     }
                     else
@@ -153,8 +160,15 @@ namespace AutoService.Controllers
                 _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Пользователь [Id: {user.Id}] успешно зарегистрирован как клиент.");
                 await _emailValidatorService.SendValidationEmailAsync(user.Email,
                     "Подтверждение Email",
-                    $@"<b>Перейдите по ссылке для подтвержения email</b>
-                    <a href='http://localhost:5173/verify-email?token={user.EmailVerificationToken}'>Подтвердить</a>");
+                    $@"<div style='font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;'>
+                        <h2 style='color: #d4332a; margin-bottom: 20px;'>AutoService</h2>
+                        <p style='color: #333; font-size: 15px; line-height: 1.6;'>Здравствуйте!<br><br>
+                        Спасибо за регистрацию. Для завершения нажмите на кнопку ниже:</p>
+                        <a href='http://localhost:5173/verify-email?token={user.EmailVerificationToken}'
+                        style='display: inline-block; background: #d4332a; color: #fff; text-decoration: none;
+                        padding: 12px 30px; border-radius: 6px; font-size: 15px; margin: 20px 0;'>Подтвердить Email</a>
+                        <p style='color: #888; font-size: 13px;'>Ссылка действительна 5 минут.<br>Если вы не регистрировались, проигнорируйте это письмо.</p>
+                      </div>");
                 return Ok(new { message = "Проверьте почту для подтверждения" });
             }
             catch (Exception ex)
