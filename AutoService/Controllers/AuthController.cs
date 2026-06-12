@@ -5,6 +5,7 @@ using AutoService.Models.Users;
 using AutoService.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AutoService.Controllers
 {
@@ -38,6 +39,11 @@ namespace AutoService.Controllers
                     throw new Exception("Неверный логин или пароль!");
                 }
 
+                // if (user.EmailConfirmed != true)
+                // {
+                //     return Unauthorized("Email не подтвержден.");
+                // }
+                
                 _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Пользователь [Id: {user.Id}] успешно вошел в систему.");
                 var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, user.Role);
                 return Ok(new { token, user.Id, user.Email, user.FullName, role = user.Role.ToString() });
@@ -82,7 +88,9 @@ namespace AutoService.Controllers
                             FullName = dto.FullName,
                             Email = dto.Email,
                             PasswordHash = HashPassword(dto.Password),
-                            Role = UserRole.Employee
+                            Role = UserRole.Employee,
+                            EmailVerificationToken = Guid.NewGuid().ToString("N"),
+                            VerificationTokenExpires = DateTime.UtcNow.AddMinutes(5)
                         };
                         _context.Users.Add(employeeUs);
                         await _context.SaveChangesAsync();
@@ -98,8 +106,12 @@ namespace AutoService.Controllers
                         await _context.SaveChangesAsync();
 
                         _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Пользователь {employeeUs.FullName} успешно зарегистрирован как сотрудник.");
-                        var employeeToken = await _tokenGeneratorService.GenerateTokenServiceAsync(employeeUs.Id, employeeUs.Email, employeeUs.FullName, UserRole.Employee);
-                        return Ok(new { token = employeeToken, id = employeeUs.Id, fullName = employeeUs.FullName, salary = employee.Salary, position = employee.Position, role = "Employee" });
+                        await _emailValidatorService.SendValidationEmailAsync(
+                            employeeUs.Email,
+                            "Подтверждение Email",
+                            $@"<b>Перейдите по ссылке для подтвержения email</b>
+                              <a href='http://localhost:5173/verify-email?token={employeeUs.EmailVerificationToken}'>Подтвердить</a>");
+                        return Ok(new { message = "Проверьте почту для подтверждения" });
                     }
                     else
                     {
@@ -120,7 +132,9 @@ namespace AutoService.Controllers
                     FullName = dto.FullName,
                     Email = dto.Email,
                     PasswordHash = HashPassword(dto.Password),
-                    Role = UserRole.Client
+                    Role = UserRole.Client,
+                    EmailVerificationToken = Guid.NewGuid().ToString("N"),
+                    VerificationTokenExpires = DateTime.UtcNow.AddMinutes(5)
                 };
 
                 _context.Users.Add(user);
@@ -137,8 +151,11 @@ namespace AutoService.Controllers
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation($"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}] Пользователь [Id: {user.Id}] успешно зарегистрирован как клиент.");
-                var token = await _tokenGeneratorService.GenerateTokenServiceAsync(user.Id, user.Email, user.FullName, UserRole.Client);
-                return Ok(new { token, user.Id, user.Email, user.FullName, client.Address, client.PhoneNumber, role = "Client" });
+                await _emailValidatorService.SendValidationEmailAsync(user.Email,
+                    "Подтверждение Email",
+                    $@"<b>Перейдите по ссылке для подтвержения email</b>
+                    <a href='http://localhost:5173/verify-email?token={user.EmailVerificationToken}'>Подтвердить</a>");
+                return Ok(new { message = "Проверьте почту для подтверждения" });
             }
             catch (Exception ex)
             {
@@ -146,7 +163,21 @@ namespace AutoService.Controllers
                 return StatusCode(500, "Ошибка при регистрации пользователя.");
             }
         }
-        
+
+        [HttpGet("verify-email")]
+        public async Task<IActionResult> VerifyEmail([FromQuery] string token)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.EmailVerificationToken == token);
+            if (user == null)
+            {
+                return NotFound(new { message = "Неверный токен." });
+            }
+            user.EmailConfirmed = true;
+            user.EmailVerificationToken = null;
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Email подтвержден." });
+        }
+
         private static string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);

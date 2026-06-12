@@ -37,7 +37,8 @@ namespace AutoService.Services.Auth
             try
             {
                 var message = new EmailMessage {
-                    To = to,
+                    From = "PitStopService <onboarding@resend.dev>",
+                    To = to, 
                     Subject = subject,
                     HtmlBody = htmlBody
                 };

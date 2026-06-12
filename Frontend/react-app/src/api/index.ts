@@ -182,5 +182,6 @@ export const authApi = {
     }) => request<LoginResponse>('/auth/login', {
         method: 'POST',
         body: JSON.stringify(data),
-    })
+    }),
+    verifyEmail: (token: string) => request<{ message: string }>(`/auth/verify-email?token=${token}`)
 }

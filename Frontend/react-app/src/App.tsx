@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Reviews from './pages/Reviews';
+import VerifyEmail from './pages/VerifyEmail';
 import OrderPage from './pages/OrderPage';
 import Account from './pages/Account';
 import NotFound from './pages/NotFound';
@@ -24,6 +25,7 @@ function PublicLayout() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reviews" element={<Reviews />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/order" element={<OrderPage />} />
         <Route path="/account" element={<Account />} />
         <Route path="*" element={<NotFound />} />
