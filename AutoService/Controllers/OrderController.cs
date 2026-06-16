@@ -7,6 +7,7 @@ using AutoService.Services.OrderServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AutoService.Services.Auth;
 namespace AutoService.Controllers
 {
     [ApiController]
@@ -16,11 +17,21 @@ namespace AutoService.Controllers
         private readonly ILogger<OrderController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IOrderViewService _orderService;
-        public OrderController(ApplicationDbContext context, ILogger<OrderController> logger, IOrderViewService orderService)
+        private readonly IEmailValidator _emailValidator;
+
+        public OrderController(ApplicationDbContext context, ILogger<OrderController> logger, IOrderViewService orderService, IEmailValidator emailValidator)
         {
             _context = context;
             _logger = logger;
             _orderService = orderService;
+            _emailValidator = emailValidator;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOrderById(int id) {
+            var dto = await _orderService.GetOrdersByIdAsync(id);
+            if (dto is null) return NotFound(new { message = "Заказ не найден" });
+            return Ok(dto);
         }
 
         [Authorize]
@@ -66,9 +77,10 @@ namespace AutoService.Controllers
                 TotalAmount = (dto.Services?.Sum(s => s.TotalPrice) ?? 0) +
                               (dto.Details?.Sum(d => d.TotalPrice) ?? 0),
                 Comment = dto.Comment ?? null,
+                ScheduledDate = dto.ScheduledDate,
                 CreatedAt = DateTime.Now
             };
-            
+
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
@@ -111,6 +123,45 @@ namespace AutoService.Controllers
 
             _logger.LogInformation($"[{order.CreatedAt}] Пользователь ID[{userIdClaim}] создал заказ {order.Id} на сумму {order.TotalAmount} рублей.");
 
+            var userEmail = await _context.Users
+                .Where(u => u.Id == int.Parse(userIdClaim))
+                .Select(u => u.Email)
+                .FirstOrDefaultAsync();
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                var servicesList = string.Join("", (dto.Services ?? new List<OrderServicesDto>())
+                    .Select(s => $"<tr><td style='padding:8px 12px;border-bottom:1px solid #eee;color:#333;'>{s.ServiceName}</td><td style='padding:8px 12px;border-bottom:1px solid #eee;color:#333;text-align:center;'>{s.Quantity}</td><td style='padding:8px 12px;border-bottom:1px solid #eee;color:#333;text-align:right;'>{s.TotalPrice} Br</td></tr>"));
+
+                var detailsList = string.Join("", (dto.Details ?? new List<OrderDetailsDto>())
+                    .Select(d => $"<tr><td style='padding:8px 12px;border-bottom:1px solid #eee;color:#333;'>{d.DetailName}</td><td style='padding:8px 12px;border-bottom:1px solid #eee;color:#333;text-align:center;'>{d.Quantity}</td><td style='padding:8px 12px;border-bottom:1px solid #eee;color:#333;text-align:right;'>{d.TotalPrice} Br</td></tr>"));
+
+                await _emailValidator.SendValidationEmailAsync(
+                    userEmail,
+                    $"Заказ №{order.Id} принят — AutoService",
+                    $@"<div style='font-family:Arial,sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;'>
+                        <h2 style='color:#d4332a;margin-bottom:16px;'>AutoService</h2>
+                        <p style='color:#333;font-size:15px;line-height:1.6;'>Здравствуйте!<br><br>
+                        Ваш заказ №<b>{order.Id}</b> принят и передан в работу.<br>
+                        Наш менеджер свяжется с вами для уточнения деталей.</p>
+                        <h3 style='color:#333;font-size:15px;border-bottom:2px solid #d4332a;padding-bottom:8px;'>Состав заказа</h3>
+                        <table style='width:100%;border-collapse:collapse;margin:12px 0;'>
+                            <thead>
+                                <tr style='background:#f8f9fa;'>
+                                    <th style='padding:8px 12px;text-align:left;color:#555;font-size:13px;'>Услуга</th>
+                                    <th style='padding:8px 12px;color:#555;font-size:13px;'>Кол-во</th>
+                                    <th style='padding:8px 12px;text-align:right;color:#555;font-size:13px;'>Цена</th>
+                                </tr>
+                            </thead>
+                            <tbody>{servicesList}{detailsList}</tbody>
+                        </table>
+                        <p style='text-align:right;font-size:16px;font-weight:700;color:#333;margin-top:8px;'>Итого: {order.TotalAmount} Br</p>
+                        <p style='color:#888;font-size:13px;margin-top:20px;border-top:1px solid #eee;padding-top:16px;'>
+                        С уважением, команда AutoService<br>
+                        г.Витебск, ул.Гагарина 41А | +375(29)976-51-13</p>
+                      </div>");
+            }
+
             return Ok(new
             {
                 order.Id,
@@ -121,7 +172,7 @@ namespace AutoService.Controllers
 
         [Authorize]
         [HttpGet("getOrders")]
-        public async Task<IActionResult> GetOrdersAsync()
+        public async Task<IActionResult> GetOrders()
         {
             try {
                 var userClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -133,13 +184,47 @@ namespace AutoService.Controllers
 
                 if(role == "Employee") orders = await _orderService.GetOrdersAsync();
                 else orders = await _orderService.GetOrdersAsync(userId);
-                
+
                 return Ok(orders);
             }
             catch (UnauthorizedAccessException ex) {
                 _logger.LogError(ex, "Ошибка при получении заказов.");
                 return Unauthorized(ex.Message);
             }
+        }
+
+        [Authorize(Roles = "Employee")]
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusDto dto)
+        {
+            var ok = await _orderService.UpdateOrderAsync(id, dto.Status);
+            if (!ok) return NotFound(new { message = "Заказ не найден" });
+            return Ok(new { message = "Статус обновлён" });
+        }
+
+        [Authorize(Roles = "Employee")]
+        [HttpPut("{id}/assign")]
+        public async Task<IActionResult> AssignEmployee(int id, [FromBody] AssignEmployeeDto dto)
+        {
+            var ok = await _orderService.AssignEmployeeAsync(id, dto.EmployeeId);
+            if (!ok) return NotFound(new { message = "Заказ или сотрудник не найден" });
+            return Ok(new { message = "Сотрудник назначен" });
+        }
+
+        [Authorize]
+        [HttpPut("{id}/schedule")]
+        public async Task<IActionResult> Schedule(int id, [FromBody] ScheduleDto dto)
+        {
+            var ok = await _orderService.ScheduleOrderAsync(id, dto.ScheduledDate);
+            if (!ok) return NotFound(new { message = "Заказ не найден" });
+            return Ok(new { message = "Время записи сохранено" });
+        }
+
+        [HttpGet("slots")]
+        public async Task<IActionResult> GetSlots([FromQuery] DateTime date)
+        {
+            var slots = await _orderService.GetAvailableSlotsAsync(date);
+            return Ok(slots);
         }
     }
 }

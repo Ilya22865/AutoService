@@ -7,7 +7,10 @@ namespace AutoService.Models.Order
     {
         Pending,
         Completed,
-        Cancelled
+        Cancelled,
+        Confirmed,
+        InProgress,
+        Ready
     }
 
     public class Order
@@ -17,6 +20,9 @@ namespace AutoService.Models.Order
         public int? ClientId { get; set; }
         public string? Comment { get; set; }
         public DateTime? CreatedAt { get; set; }
+        public DateTime? ScheduledDate { get; set; }
+        public int? AssignedEmployeeId { get; set; }
+        public Employee? AssignedEmployee { get; set; }
         public Client? Client { get; set; }       
         [Column(TypeName = "decimal(10,2)")]
         public decimal TotalAmount { get; set; }

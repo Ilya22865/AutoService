@@ -33,18 +33,22 @@ namespace AutoService.Services.Auth
             } catch { return false; }
         }
 
-        public async Task SendValidationEmailAsync(string to, string subject, string htmlBody) {
+        public async Task SendValidationEmailAsync(string to, string subject, string htmlBody)
+        {
             try
             {
-                var message = new EmailMessage {
+                var message = new EmailMessage
+                {
                     From = "PitStopService <onboarding@resend.dev>",
-                    To = to, 
+                    To = to,
                     Subject = subject,
                     HtmlBody = htmlBody
                 };
 
                 await _resend.EmailSendAsync(message);
-            } catch {}
+            }
+            catch { }
         }
+        
     }
 }

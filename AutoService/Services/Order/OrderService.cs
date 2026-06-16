@@ -56,16 +56,32 @@ namespace AutoService.Services.OrderServices
             Client = order.Client is not null ? MapClient(order.Client) : null,
             Vehicle = order.Vehicle is not null ? MapVehicle(order.Vehicle) : null,
             Comment = order.Comment,
+            ScheduledDate = order.ScheduledDate,
+            AssignedEmployeeId = order.AssignedEmployeeId,
+            AssignedEmployeeName = order.AssignedEmployee?.User?.FullName,
             Services = order.OrderServices?.Select(MapOrderService).ToList() ?? [],
             Details = order.OrderDetails?.Select(MapOrderDetails).ToList() ?? [],
         };
 
+        public async Task<OrderDto?> GetOrdersByIdAsync(int orderId) {
+            var order = await _context.Orders
+                .Include(o => o.Client!).ThenInclude(c => c.User!)
+                .Include(o => o.Client!).ThenInclude(c => c.Vehicles!)
+                .Include(o => o.Vehicle)
+                .Include(o => o.AssignedEmployee!).ThenInclude(e => e.User!)
+                .Include(o => o.OrderServices!).ThenInclude((OrderService os) => os.Service!)
+                .Include(o => o.OrderDetails!).ThenInclude((OrderDetails od) => od.Detail)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            return order is null ? null : MapToDto(order);
+        }
         public async Task<IEnumerable<OrderDto>> GetOrdersAsync(int? userId = null)
         {
             IQueryable<Order> query = _context.Orders
                 .Include(o => o.Client!).ThenInclude(c => c.User!)
                 .Include(o => o.Client!).ThenInclude(c => c.Vehicles!)
                 .Include(o => o.Vehicle)
+                .Include(o => o.AssignedEmployee!).ThenInclude(e => e.User!)
                 .Include(o => o.OrderServices!).ThenInclude((OrderService os) => os.Service!)
                 .Include(o => o.OrderDetails!).ThenInclude((OrderDetails od) => od.Detail);
 
@@ -97,7 +113,53 @@ namespace AutoService.Services.OrderServices
             var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId && o.Client != null && o.Client.UserId == userId);
             if(order == null) return false;
 
-            order.Status = OrderStatus.Cancelled;
+                order.Status = OrderStatus.Cancelled;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<TimeSlotDto>> GetAvailableSlotsAsync(DateTime date)
+        {
+            var start = date.Date.AddHours(9);
+            var end = date.Date.AddHours(18);
+            var duration = TimeSpan.FromHours(1);
+
+            var booked = await _context.Orders
+                .Where(o => o.ScheduledDate >= start && o.ScheduledDate < end)
+                .Select(o => o.ScheduledDate!.Value)
+                .ToListAsync();
+
+            var slots = new List<TimeSlotDto>();
+            for (var time = start; time < end; time = time.Add(duration))
+            {
+                slots.Add(new TimeSlotDto
+                {
+                    Time = time.ToString("HH:mm"),
+                    Available = !booked.Any(b => b.Hour == time.Hour && b.Date == date.Date)
+                });
+            }
+            return slots;
+        }
+
+        public async Task<bool> AssignEmployeeAsync(int orderId, int employeeId)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null) return false;
+
+            var employee = await _context.Employees.FindAsync(employeeId);
+            if (employee == null) return false;
+
+            order.AssignedEmployeeId = employeeId;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> ScheduleOrderAsync(int orderId, DateTime scheduledDate)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null) return false;
+
+            order.ScheduledDate = scheduledDate;
             await _context.SaveChangesAsync();
             return true;
         }
