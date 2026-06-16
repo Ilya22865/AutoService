@@ -28,7 +28,16 @@ export default function Header() {
     const navigate = useNavigate();
     useLocation();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const user = getUser();
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        const id = parseInt(searchQuery);
+        if (!id) return;
+        navigate(`/order-status/${id}`);
+        setSearchQuery('');
+    };
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -98,6 +107,21 @@ export default function Header() {
                                 {link.label}
                             </a>
                         ))}
+                        <form className="header__search" onSubmit={handleSearch}>
+                            <input
+                                type="text"
+                                className="header__search-input"
+                                placeholder="Поиск заказа по №"
+                                value={searchQuery}
+                                onChange={e => setSearchQuery(e.target.value)}
+                            />
+                            <button type="submit" className="header__search-btn">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                                    <circle cx="7" cy="7" r="5" />
+                                    <path d="M11 11l3 3" />
+                                </svg>
+                            </button>
+                        </form>
                         {user?.role === 'Employee' && (
                             <Link
                                 to="/employee"

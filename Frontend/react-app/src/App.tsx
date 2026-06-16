@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Reviews from './pages/Reviews';
 import VerifyEmail from './pages/VerifyEmail';
 import OrderPage from './pages/OrderPage';
+import OrderStatus from './pages/OrderStatus';
 import Account from './pages/Account';
 import NotFound from './pages/NotFound';
 import EmployeeLayout from './pages/employee/EmployeeLayout';
@@ -27,6 +28,7 @@ function PublicLayout() {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/order" element={<OrderPage />} />
+        <Route path="/order-status/:id" element={<OrderStatus />} />
         <Route path="/account" element={<Account />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

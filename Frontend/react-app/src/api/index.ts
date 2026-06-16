@@ -40,11 +40,12 @@ async function request<T>(
 }
 
 interface RegisterResponse {
-    token: string,
-    id: number,
-    email: string,
-    fullName: string,
-    role: string
+    token?: string,
+    id?: number,
+    email?: string,
+    fullName?: string,
+    role?: string,
+    message?: string
 }
 
 export interface ClientRegisterResponse extends RegisterResponse {
@@ -81,6 +82,8 @@ export interface OrderDto {
     services: OrderServiceDto[];
     details: OrderDetailsDto[];
     comment: string | null;
+    scheduledDate?: string | null;
+    assignedEmployeeName?: string | null;
 }
 
 export interface OrderRequest {
@@ -88,6 +91,7 @@ export interface OrderRequest {
     services: OrderServiceDto[]
     details: OrderDetailsDto[]
     comment?: string
+    scheduledDate?: string | null
 }
 
 export interface VehicleDto {
@@ -162,6 +166,73 @@ export const reviewApi = {
         method: 'GET'
     })
 }
+export const orderStatusApi = {
+    getOrder: (id: number) => request<OrderStatusDto>(`/order/${id}`),
+}
+
+interface OrderServiceView {
+    serviceName: string;
+    priceAtSale: number;
+    quantity: number;
+    totalPrice: number;
+}
+
+interface OrderDetailView {
+    detailName: string;
+    quantity: number;
+    priceAtSale: number;
+    totalPrice: number;
+}
+
+interface OrderClientView {
+    fullName: string;
+    email: string;
+    address: string;
+    phoneNumber: string;
+}
+
+interface OrderVehicleView {
+    model: string;
+    year: number;
+    vinNumber: string;
+    registrationNumber: string;
+}
+
+export interface OrderStatusDto {
+    orderId: number;
+    status: string;
+    client?: OrderClientView | null;
+    vehicle?: OrderVehicleView | null;
+    services: OrderServiceView[];
+    details: OrderDetailView[];
+    comment?: string | null;
+    totalAmount?: number;
+    createdAt?: string;
+    scheduledDate?: string | null;
+    assignedEmployeeName?: string | null;
+}
+
+export interface TimeSlotDto {
+    time: string;
+    available: boolean;
+}
+
+export const orderApiExt = {
+    updateStatus: (id: number, status: string) => request<{ message: string }>(`/order/${id}/status`, {
+        method: 'PUT',
+        body: JSON.stringify({ status }),
+    }),
+    assignEmployee: (orderId: number, employeeId: number) => request<{ message: string }>(`/order/${orderId}/assign`, {
+        method: 'PUT',
+        body: JSON.stringify({ employeeId }),
+    }),
+    schedule: (orderId: number, scheduledDate: string) => request<{ message: string }>(`/order/${orderId}/schedule`, {
+        method: 'PUT',
+        body: JSON.stringify({ scheduledDate }),
+    }),
+    getSlots: (date: string) => request<TimeSlotDto[]>(`/order/slots?date=${date}`),
+}
+
 export const authApi = {
     register: (data: {
         fullName: string,

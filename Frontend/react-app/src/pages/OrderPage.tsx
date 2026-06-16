@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { orderApi, catalogApi } from '../api';
+import { orderApi, catalogApi, orderApiExt, type TimeSlotDto } from '../api';
 
 type LineItem = {
   id: number;
@@ -31,6 +31,10 @@ export default function OrderPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successId, setSuccessId] = useState<number | null>(null);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [slots, setSlots] = useState<TimeSlotDto[]>([]);
+  const [selectedTime, setSelectedTime] = useState('');
+  const [loadingSlots, setLoadingSlots] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -52,6 +56,16 @@ export default function OrderPage() {
       setParts(data.map(d => ({ id: d.id, name: d.name, price: d.price })))
     ).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!selectedDate) return;
+    setLoadingSlots(true);
+    setSelectedTime('');
+    orderApiExt.getSlots(selectedDate)
+      .then(setSlots)
+      .catch(() => {})
+      .finally(() => setLoadingSlots(false));
+  }, [selectedDate]);
 
   const addService = (s: CatalogItem) => {
     setSelectedServices(prev => {
@@ -133,6 +147,9 @@ export default function OrderPage() {
     try {
       const data = await orderApi.createOrder({
         comment: comment || undefined,
+        scheduledDate: selectedDate && selectedTime
+          ? `${selectedDate}T${selectedTime}:00`
+          : undefined,
         vehicle: vin ? {
           model,
           year: Number(year) || 0,
@@ -281,6 +298,38 @@ export default function OrderPage() {
                   );
                 })}
               </div>
+            </div>
+
+            <div className="order-page__section">
+              <h2>Дата и время записи</h2>
+              <div className="order-page__form-row">
+                <input
+                  type="date"
+                  className="order-page__input"
+                  value={selectedDate}
+                  onChange={e => setSelectedDate(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              </div>
+              {loadingSlots && <p className="order-page__hint">Загрузка слотов...</p>}
+              {selectedDate && !loadingSlots && slots.length === 0 && (
+                <p className="order-page__hint">Нет доступных слотов на эту дату</p>
+              )}
+              {slots.length > 0 && (
+                <div className="order-page__slots">
+                  {slots.map(slot => (
+                    <button
+                      key={slot.time}
+                      type="button"
+                      className={`order-page__slot ${slot.available ? '' : 'taken'} ${selectedTime === slot.time ? 'selected' : ''}`}
+                      disabled={!slot.available}
+                      onClick={() => setSelectedTime(slot.available ? slot.time : '')}
+                    >
+                      {slot.time}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="order-page__section">

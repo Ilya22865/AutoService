@@ -38,8 +38,12 @@ export default function Register() {
           ? { employeeCode: clean(form.employeeCode), position: clean(form.position), salary: Number(form.salary) || 0 }
           : { address: clean(form.address), phoneNumber: clean(form.phoneNumber) }),
       });
-      localStorage.setItem('token', data.token);
-      navigate(data.role === 'Employee' ? '/employee' : '/account');
+      if ('token' in data && data.token) {
+        localStorage.setItem('token', data.token);
+        navigate(data.role === 'Employee' ? '/employee' : '/account');
+      } else {
+        navigate('/login', { state: { message: 'Проверьте почту для подтверждения email' } });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка регистрации');
     } finally {
