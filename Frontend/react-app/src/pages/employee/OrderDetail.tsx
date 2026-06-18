@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { orderStatusApi, orderApiExt, type OrderDto } from '../../api';
+import { orderStatusApi, orderApiExt, employeeApi, type OrderDto, type EmployeeDto } from '../../api';
 
 const statusLabels: Record<string, string> = {
     Pending: 'Ожидает',
@@ -20,6 +20,7 @@ export default function OrderDetail() {
     const [error, setError] = useState('');
     const [status, setStatus] = useState('');
     const [employeeId, setEmployeeId] = useState('');
+    const [employees, setEmployees] = useState<EmployeeDto[]>([]);
     const [saving, setSaving] = useState(false);
 
     const load = () => {
@@ -29,12 +30,21 @@ export default function OrderDetail() {
             .then(d => {
                 setOrder(d as unknown as OrderDto);
                 setStatus(d.status);
+                if (d.assignedEmployeeName) {
+                    setEmployeeId(String(d.assignedEmployeeId ?? ''));
+                }
             })
             .catch(e => setError(e instanceof Error ? e.message : 'Ошибка'))
             .finally(() => setLoading(false));
     };
 
     useEffect(load, [id]);
+
+    useEffect(() => {
+        employeeApi.list()
+            .then(setEmployees)
+            .catch(() => {});
+    }, []);
 
     const handleSaveStatus = async () => {
         if (!id) return;
@@ -191,13 +201,18 @@ export default function OrderDetail() {
                             </p>
                         )}
                         <div className="emp-order__assign-row">
-                            <input
-                                type="number"
+                            <select
                                 className="emp-order__input"
-                                placeholder="ID сотрудника"
                                 value={employeeId}
                                 onChange={e => setEmployeeId(e.target.value)}
-                            />
+                            >
+                                <option value="">Выберите сотрудника</option>
+                                {employees.map(emp => (
+                                    <option key={emp.id} value={emp.id}>
+                                        {emp.fullName}{emp.position ? ` (${emp.position})` : ''}
+                                    </option>
+                                ))}
+                            </select>
                             <button className="btn btn-primary" onClick={handleAssign} disabled={saving || !employeeId}>
                                 Назначить
                             </button>

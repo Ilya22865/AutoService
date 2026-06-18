@@ -83,6 +83,7 @@ export interface OrderDto {
     details: OrderDetailsDto[];
     comment: string | null;
     scheduledDate?: string | null;
+    assignedEmployeeId?: number | null;
     assignedEmployeeName?: string | null;
 }
 
@@ -209,12 +210,19 @@ export interface OrderStatusDto {
     totalAmount?: number;
     createdAt?: string;
     scheduledDate?: string | null;
+    assignedEmployeeId?: number | null;
     assignedEmployeeName?: string | null;
 }
 
 export interface TimeSlotDto {
     time: string;
     available: boolean;
+}
+
+export interface EmployeeDto {
+    id: number;
+    fullName: string;
+    position?: string;
 }
 
 export const orderApiExt = {
@@ -231,6 +239,10 @@ export const orderApiExt = {
         body: JSON.stringify({ scheduledDate }),
     }),
     getSlots: (date: string) => request<TimeSlotDto[]>(`/order/slots?date=${date}`),
+}
+
+export const employeeApi = {
+    list: () => request<EmployeeDto[]>('/employee/list'),
 }
 
 export const authApi = {

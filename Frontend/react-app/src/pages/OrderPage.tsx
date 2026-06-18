@@ -148,7 +148,7 @@ export default function OrderPage() {
       const data = await orderApi.createOrder({
         comment: comment || undefined,
         scheduledDate: selectedDate && selectedTime
-          ? `${selectedDate}T${selectedTime}:00`
+          ? `${selectedDate}T${selectedTime.split('–')[0]}:00`
           : undefined,
         vehicle: vin ? {
           model,
@@ -302,14 +302,27 @@ export default function OrderPage() {
 
             <div className="order-page__section">
               <h2>Дата и время записи</h2>
-              <div className="order-page__form-row">
-                <input
-                  type="date"
-                  className="order-page__input"
-                  value={selectedDate}
-                  onChange={e => setSelectedDate(e.target.value)}
-                  min={new Date().toISOString().split('T')[0]}
-                />
+              <div className="order-page__date-buttons">
+                {Array.from({ length: 14 }, (_, i) => {
+                  const d = new Date();
+                  d.setDate(d.getDate() + i);
+                  const dateStr = d.toISOString().split('T')[0];
+                  const dayName = d.toLocaleDateString('ru-RU', { weekday: 'short' });
+                  const dayNum = d.toLocaleDateString('ru-RU', { day: 'numeric' });
+                  const monthName = d.toLocaleDateString('ru-RU', { month: 'short' });
+                  return (
+                    <button
+                      key={dateStr}
+                      type="button"
+                      className={`order-page__date-btn ${selectedDate === dateStr ? 'selected' : ''}`}
+                      onClick={() => setSelectedDate(dateStr)}
+                    >
+                      <span className="order-page__date-btn-day">{dayName}</span>
+                      <span className="order-page__date-btn-num">{dayNum}</span>
+                      <span className="order-page__date-btn-month">{monthName}</span>
+                    </button>
+                  );
+                })}
               </div>
               {loadingSlots && <p className="order-page__hint">Загрузка слотов...</p>}
               {selectedDate && !loadingSlots && slots.length === 0 && (

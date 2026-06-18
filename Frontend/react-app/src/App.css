@@ -2052,6 +2052,7 @@ html {
   padding: 48px 0 80px;
   background: var(--bg-alt);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .order-page__header {
@@ -2074,6 +2075,10 @@ html {
   grid-template-columns: 1fr 380px;
   gap: 32px;
   align-items: start;
+}
+
+.order-page__left {
+  min-width: 0;
 }
 
 .order-page__section {
@@ -2366,6 +2371,56 @@ html {
   font-size: 14px;
   color: var(--text);
   margin: 8px 0;
+}
+
+.order-page__date-buttons {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.order-page__date-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 72px;
+  padding: 10px 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-alt);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.order-page__date-btn:hover {
+  border-color: var(--accent);
+}
+
+.order-page__date-btn.selected {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.order-page__date-btn-day {
+  font-size: 12px;
+  text-transform: lowercase;
+  opacity: 0.7;
+}
+
+.order-page__date-btn-num {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.order-page__date-btn-month {
+  font-size: 11px;
+  text-transform: lowercase;
+  opacity: 0.7;
 }
 
 .order-page__slots {

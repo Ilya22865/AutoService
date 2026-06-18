@@ -34,7 +34,7 @@ export default function Dashboard() {
       <div className="emp-page__header">
         <h1>Дашборд</h1>
         <p>Обзор работы автосервиса</p>
-        <button className="btn btn-outline" style={{ marginLeft: 'auto' }}
+        <button className="btn btn-primary" style={{ marginLeft: 'auto' }}
           onClick={() => {
             const token = localStorage.getItem('token');
             if (!token) return alert('Вы не авторизованы');

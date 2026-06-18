@@ -121,21 +121,25 @@ namespace AutoService.Services.OrderServices
         public async Task<List<TimeSlotDto>> GetAvailableSlotsAsync(DateTime date)
         {
             var start = date.Date.AddHours(9);
-            var end = date.Date.AddHours(18);
-            var duration = TimeSpan.FromHours(1);
+            var end = date.Date.AddHours(21);
+            var slotDuration = TimeSpan.FromHours(3);
 
-            var booked = await _context.Orders
+            var allScheduled = await _context.Orders
                 .Where(o => o.ScheduledDate >= start && o.ScheduledDate < end)
                 .Select(o => o.ScheduledDate!.Value)
                 .ToListAsync();
 
             var slots = new List<TimeSlotDto>();
-            for (var time = start; time < end; time = time.Add(duration))
+            for (var slotStart = start; slotStart < end; slotStart = slotStart.Add(slotDuration))
             {
+                var slotEnd = slotStart.Add(slotDuration);
+                var isAvailable = !allScheduled.Any(s =>
+                    s >= slotStart && s < slotEnd);
+
                 slots.Add(new TimeSlotDto
                 {
-                    Time = time.ToString("HH:mm"),
-                    Available = !booked.Any(b => b.Hour == time.Hour && b.Date == date.Date)
+                    Time = $"{slotStart:HH:mm}–{slotEnd:HH:mm}",
+                    Available = isAvailable
                 });
             }
             return slots;
