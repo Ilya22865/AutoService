@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 8044
+      MYSQL_DATABASE: autoservice
+      MYSQL_USER: autoservice
+      MYSQL_PASSWORD: 8044
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "5130:5130"
+    environment:
+      ASPNETCORE_URLS: http://+:5130
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Server=db;Port=3306;Database=autoservice;User=autoservice;Password=8044;"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
